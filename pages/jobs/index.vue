@@ -1,13 +1,18 @@
 <template>
-  <div class="py-8 space-y-12">
+  <div class="space-y-12">
     <div id="header-jobs" class="flex justify-center mt-16">
       <div class="space-y-7">
         <p class="text-6xl font-semibold text-center font-poppin">JOBS</p>
         <div class="space-y-4">
-          <input
-            type="text"
-            placeholder="ค้นหาชีพที่คุณสนใจ"
-            class="w-[1000px] px-4 py-3 rounded-2xl border-[3px] border-[#D3D3D3] font-medium" />
+          <div class="relative">
+            <IconSearch
+              class="absolute top-[50%] left-[95%] translate-y-[-50%] text-[#898989]"
+              width="28px" />
+            <input
+              type="text"
+              placeholder="ค้นหาชีพที่คุณสนใจ"
+              class="w-[1000px] pl-4 py-3 pr-14 rounded-2xl border-[3px] border-[#D3D3D3] font-medium" />
+          </div>
           <div class="flex justify-center space-x-3">
             <p
               class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">

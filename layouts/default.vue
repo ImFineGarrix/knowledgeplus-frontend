@@ -1,7 +1,7 @@
 <template>
   <div>
     <Navbar />
-    <main id="site-content">
+    <main id="site-content" class="py-8">
       <NuxtPage />
     </main>
   </div>
