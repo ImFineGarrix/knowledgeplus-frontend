@@ -18,15 +18,16 @@
         </div>
       </div>
     </div>
-    <div>
+    <div class="my-4">
       <p class="text-2xl font-semibold">ทักษะแนะนำสำหรับคุณ</p>
-      <div class="grid grid-cols-5 gap-4 my-12">
+      <div class="grid grid-cols-5 gap-4 my-6 mt-12">
         <div
           v-for="(recommend, indexRecommend) in recommendSkill"
           :key="`skill=recommend-${indexRecommend}`">
           <CardSkill :name="recommend.name" :link="recommend.link" />
         </div>
       </div>
+      <Pagination />
     </div>
     <div>
       <p class="text-2xl font-semibold">ทักษะทั้งหมด</p>
