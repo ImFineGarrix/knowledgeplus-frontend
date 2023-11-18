@@ -29,11 +29,47 @@
           คอร์สที่เกี่ยวข้อง
         </p>
       </div>
+      <div class="my-4">
+        <div class="grid grid-cols-5 gap-4 my-6 mt-12">
+          <div
+            v-for="(recommend, indexRecommend) in recommendSkill"
+            :key="`skill=recommend-${indexRecommend}`">
+            <CardSkill :name="recommend.name" :link="recommend.link" />
+          </div>
+        </div>
+        <Pagination />
+      </div>
     </div>
   </div>
 </template>
 <script>
 export default {
+  data() {
+    return {
+      recommendSkill: [
+        {
+          name: 'Coding',
+          link: '/images/icon/good-code.png',
+        },
+        {
+          name: 'Coding',
+          link: '/images/icon/good-code.png',
+        },
+        {
+          name: 'Coding',
+          link: '/images/icon/good-code.png',
+        },
+        {
+          name: 'Coding',
+          link: '/images/icon/good-code.png',
+        },
+        {
+          name: 'CodingCodingCodingCodingCodingCodingCodingCoding',
+          link: '/images/icon/good-code.png',
+        },
+      ],
+    }
+  },
   computed: {
     idParams() {
       return this.$route.params.id || ''
