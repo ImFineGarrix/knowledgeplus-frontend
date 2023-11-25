@@ -8,7 +8,7 @@
       @input="updateSearch($event)"
       type="text"
       :placeholder="placeholder"
-      class="w-[1000px] pl-4 py-3 pr-14 rounded-2xl border-[3px] border-[#D3D3D3] font-medium" />
+      class="w-[1000px] pl-4 py-3 pr-14 rounded-2xl border-[3px] border-[#D3D3D3]" />
   </div>
 </template>
 <script>
