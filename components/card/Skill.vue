@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div class="flex justify-center">
+    <div
+      class="flex justify-center transition-all cursor-pointer hover:scale-105">
       <div class="relative">
         <img
           :src="link"
