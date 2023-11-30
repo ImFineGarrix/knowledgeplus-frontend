@@ -6,14 +6,14 @@
         <div class="space-y-4">
           <Search @input="handleSearch" placeholder="ค้นหาทักษะคุณสนใจ" />
           <div class="flex justify-center space-x-3">
-            <p
+            <button
               class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">
               All
-            </p>
-            <p
+            </button>
+            <button
               class="cursor-pointer px-8 flex items-center font-semibold bg-white border-2 rounded-full border-[#D3D3D3] transition-all duration-300 hover:bg-[#d7d7d7b2]">
               IT
-            </p>
+            </button>
           </div>
         </div>
       </div>
@@ -43,9 +43,11 @@
 </template>
 
 <script>
+import SkillProvider from '~/resources/SkillProvider'
 export default {
   data() {
     return {
+      SkillService: new SkillProvider(),
       search: '1',
       recommendSkill: [
         {
@@ -69,9 +71,22 @@ export default {
           link: '/images/icon/good-code.png',
         },
       ],
+      skills: [],
+      error: null,
     }
   },
+  mounted() {
+    this.getSkill()
+  },
   methods: {
+    async getSkill() {
+      const data = await this.SkillService.getSkill()
+      if (data.message === 'success') {
+        this.skills = JSON.parse(JSON.stringify(data.data))
+      } else {
+        this.error = data
+      }
+    },
     handleSearch(newSearch) {
       this.search = newSearch.target.value
     },
