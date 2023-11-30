@@ -6,14 +6,14 @@
         <div class="space-y-4">
           <Search @input="handleSearch" placeholder="ค้นหาอาชีพที่คุณสนใจ" />
           <div class="flex justify-center space-x-3">
-            <p
+            <button
               class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">
               All
-            </p>
-            <p
+            </button>
+            <button
               class="cursor-pointer px-8 flex items-center font-semibold bg-white border-2 rounded-full border-[#D3D3D3] transition-all duration-300 hover:bg-[#d7d7d7b2]">
               IT
-            </p>
+            </button>
           </div>
         </div>
       </div>
