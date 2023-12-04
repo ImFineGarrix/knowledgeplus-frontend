@@ -2,22 +2,21 @@
   <div class="space-y-10">
     <div class="flex items-center gap-10">
       <div class="w-7/12 space-y-2">
-        <p class="text-2xl font-medium leading-none">IT Skill</p>
+        <p class="text-2xl font-medium leading-none uppercase">
+          {{ levelStore.getLevelNameById(skill.levelId) }} level
+        </p>
         <p class="text-6xl leading-none text-[#319F43] font-bold">
-          Skill detail
+          {{ skill.name }}
         </p>
         <p class="w-10/12 pt-4 text-sm font-light">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-          cupiditate repellendus odio ullam atque omnis illo culpa quo placeat
-          saepe sit, quam, consequatur ab assumenda, sunt dolore fugiat
-          quibusdam. Mollitia?
+          {{ skill.description }}
         </p>
       </div>
       <div class="w-5/12 py-10">
         <div class="flex justify-center">
           <div class="relative">
             <img
-              src="/images/icon/good-code.png"
+              :src="`${config.public.firebaseBaseUrl}${skill.imageUrl}`"
               class="absolute w-40 top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%]" />
             <IconBgSkill class="w-64" />
           </div>
@@ -49,9 +48,24 @@
   </div>
 </template>
 <script>
+import LevelProvider from '~/resources/LevelProvider'
+import SkillProvider from '~/resources/SkillProvider'
+import { useLevelStore } from '~/stores/Levels'
+import { useRuntimeConfig } from 'nuxt/app'
+
 export default {
   data() {
     return {
+      LevelService: new LevelProvider(),
+      SkillService: new SkillProvider(),
+      levelStore: useLevelStore(),
+      config: useRuntimeConfig(),
+      skill: {
+        name: '',
+        description: '',
+        imageUrl: '',
+        levelId: '',
+      },
       recommendJob: [
         {
           name: 'Front-End Developer',
@@ -75,6 +89,26 @@ export default {
   computed: {
     idParams() {
       return this.$route.params.id || ''
+    },
+  },
+  mounted() {
+    if (!this.levelStore.level.length) {
+      this.getLevel()
+    }
+    this.getSkillById(this.idParams)
+  },
+  methods: {
+    async getSkillById(id) {
+      const status = await this.SkillService.getSkillById(id)
+      if (status.message === 'success') {
+        this.skill = status.data
+      }
+    },
+    async getLevel() {
+      const status = await this.LevelService.getLevel()
+      if (status.message === 'success') {
+        this.levelStore.setLevel(status.data)
+      }
     },
   },
 }

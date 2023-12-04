@@ -6,14 +6,14 @@
         <div class="space-y-4">
           <Search @input="handleSearch" placeholder="ค้นหาอาชีพที่คุณสนใจ" />
           <div class="flex justify-center space-x-3">
-            <button
-              class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">
-              All
-            </button>
-            <button
-              class="cursor-pointer px-8 flex items-center font-semibold bg-white border-2 rounded-full border-[#D3D3D3] transition-all duration-300 hover:bg-[#d7d7d7b2]">
-              IT
-            </button>
+            <div
+              v-for="(category, indexCategory) in categoryStore.category"
+              :key="`category-${indexCategory}`">
+              <Button
+                :name="category.name"
+                :active="checkButtonActive(category.categoryId, inputId)"
+                @click="setInputId(category.categoryId)" />
+            </div>
           </div>
         </div>
       </div>
@@ -24,9 +24,7 @@
         <div
           v-for="(recommend, indexRecommend) in recommendJob"
           :key="`job-recommend-${indexRecommend}`">
-          <NuxtLink to="/jobs/1">
-            <CardJob :name="recommend.name" :desc="recommend.desc" />
-          </NuxtLink>
+          <CardJob :name="recommend.name" :desc="recommend.desc" />
         </div>
       </div>
       <Pagination />
@@ -34,10 +32,10 @@
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
       <div class="grid grid-cols-4 gap-6 my-6">
-        <div
-          v-for="(recommend, indexRecommend) in recommendJob"
-          :key="`job-recommend-${indexRecommend}`">
-          <CardJob :name="recommend.name" :desc="recommend.desc" />
+        <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
+          <NuxtLink :to="`/jobs/${job.careerId}`">
+            <CardJob :name="job.name" :desc="job.description" />
+          </NuxtLink>
         </div>
       </div>
     </div>
@@ -45,10 +43,19 @@
 </template>
 
 <script>
+import { useCategoryStore } from '~/stores/Categories'
+import CategoryProvider from '~/resources/CategoryProvider'
+import JobProvider from '~/resources/JobProvider'
+
 export default {
   data() {
     return {
+      CategoryService: new CategoryProvider(),
+      JobService: new JobProvider(),
+      categoryStore: useCategoryStore(),
       search: '',
+      inputId: 0,
+      jobs: [],
       recommendJob: [
         {
           name: 'Front-End Developer',
@@ -69,9 +76,33 @@ export default {
       ],
     }
   },
+  mounted() {
+    if (!this.categoryStore.category.length) {
+      this.getCategory()
+    }
+    this.getJob()
+  },
   methods: {
+    async getJob() {
+      const status = await this.JobService.getJob(1, 9999)
+      if (status.message === 'success') {
+        this.jobs = status.data.careers
+      }
+    },
+    async getCategory() {
+      const status = await this.CategoryService.getCategory()
+      if (status.message === 'success') {
+        this.categoryStore.setCategory(status.data)
+      }
+    },
     handleSearch(newSearch) {
       this.search = newSearch.target.value
+    },
+    setInputId(id) {
+      this.inputId = id
+    },
+    checkButtonActive(id, input) {
+      return id === input
     },
   },
 }
