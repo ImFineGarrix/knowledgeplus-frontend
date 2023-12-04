@@ -41,7 +41,8 @@
         </div>
       </div>
     </div>
-    <div class="space-y-10">
+    <!-- Recommend Skill -->
+    <!-- <div class="space-y-10">
       <TextSection
         text="ทักษะที่เหมาะสำหรับสาย IT"
         textButton="ดูทักษะทั้งหมด"
@@ -53,14 +54,22 @@
           <CardSkill :name="recommend.name" :link="recommend.link" />
         </div>
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
-
 <script>
+import { useCategoryStore } from '~/stores/Categories'
+import { useLevelStore } from '~/stores/Levels'
+import CategoryProvider from '~/resources/CategoryProvider'
+import LevelProvider from '~/resources/LevelProvider'
+
 export default {
   data() {
     return {
+      LevelService: new LevelProvider(),
+      CategoryService: new CategoryProvider(),
+      levelStore: useLevelStore(),
+      categoryStore: useCategoryStore(),
       recommendSkill: [
         {
           name: 'Coding',
@@ -102,6 +111,28 @@ export default {
         },
       ],
     }
+  },
+  mounted() {
+    if (!this.categoryStore.category.length) {
+      this.getCategory()
+    }
+    if (!this.levelStore.level.length) {
+      this.getLevel()
+    }
+  },
+  methods: {
+    async getCategory() {
+      const status = await this.CategoryService.getCategory()
+      if (status.message === 'success') {
+        this.categoryStore.setCategory(status.data)
+      }
+    },
+    async getLevel() {
+      const status = await this.LevelService.getLevel()
+      if (status.message === 'success') {
+        this.levelStore.setLevel(status.data)
+      }
+    },
   },
 }
 </script>

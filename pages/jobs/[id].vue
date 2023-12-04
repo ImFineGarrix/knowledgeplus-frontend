@@ -2,20 +2,16 @@
   <div class="space-y-10">
     <div class="flex items-center gap-10">
       <div class="w-7/12 space-y-2">
-        <p class="text-6xl font-bold">Front-End Developer</p>
-        <p class="text-[#319F43] text-base">
-          "Lorem ipsum dolor sit amet consectetur adipisicing elit. Quibusdam
-          ratio.."
+        <p class="text-6xl font-bold">{{ job.name }}</p>
+        <p class="text-[#319F43] text-base" v-if="job.shortDesc">
+          {{ `"${job.shortDesc}"` }}
         </p>
         <p class="w-10/12 pt-4 text-sm font-light">
-          Lorem ipsum dolor sit amet consectetur adipisicing elit. Quis
-          cupiditate repellendus odio ullam atque omnis illo culpa quo placeat
-          saepe sit, quam, consequatur ab assumenda, sunt dolore fugiat
-          quibusdam. Mollitia?
+          {{ job.description }}
         </p>
       </div>
       <div class="w-5/12">
-        <img src="/images/categories/it.png" class="w-[500px]" />
+        <img :src="imageUrl" class="w-[500px]" />
       </div>
     </div>
     <div>
@@ -43,9 +39,20 @@
   </div>
 </template>
 <script>
+import JobProvider from '~/resources/JobProvider'
+import { useRuntimeConfig } from 'nuxt/app'
+
 export default {
   data() {
     return {
+      JobService: new JobProvider(),
+      config: useRuntimeConfig(),
+      job: {
+        name: '',
+        description: '',
+        shortDesc: '',
+        categories: [{ imageUrl: '' }],
+      },
       recommendSkill: [
         {
           name: 'Coding',
@@ -73,6 +80,20 @@ export default {
   computed: {
     idParams() {
       return this.$route.params.id || ''
+    },
+    imageUrl() {
+      return `${this.config.public.firebaseBaseUrl}${this.job.categories[0].imageUrl}`
+    },
+  },
+  mounted() {
+    this.getJobById(this.idParams)
+  },
+  methods: {
+    async getJobById(id) {
+      const status = await this.JobService.getJobById(id)
+      if (status.message === 'success') {
+        this.job = status.data
+      }
     },
   },
 }

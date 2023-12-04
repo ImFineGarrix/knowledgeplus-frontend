@@ -11,10 +11,15 @@ export default defineNuxtConfig({
   },
   app: {
     pageTransition: { name: 'page', mode: 'out-in' },
+    head: {
+      titleTemplate: 'KNOWLEDGE+',
+    },
   },
   runtimeConfig: {
     public: {
       apiBaseUrl: process.env.API_BASE_URL,
+      firebaseBaseUrl: process.env.FIREBASE_BASE_URL,
     },
   },
+  modules: ['@pinia/nuxt'],
 })
