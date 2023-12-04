@@ -5,11 +5,11 @@
       <p class="text-[#319F43] text-4xl font-medium">
         {{ name }}
       </p>
-      <p class="mt-3 text-xs w-52">
-      <div class="two-lines-ellipsis">
-        <span>{{ desc }}</span>
+      <div class="mt-3 text-xs w-52">
+        <div class="two-lines-ellipsis">
+          <span>{{ desc }}</span>
+        </div>
       </div>
-      </p>
     </div>
   </div>
 </template>
@@ -18,12 +18,12 @@ export default {
   props: {
     name: {
       type: String,
-      default: () => ''
+      default: () => '',
     },
     desc: {
       type: String,
-      default: () => ''
-    }
-  }
+      default: () => '',
+    },
+  },
 }
 </script>
