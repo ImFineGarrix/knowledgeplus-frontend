@@ -19,7 +19,7 @@
       </div>
     </div>
     <div class="my-4">
-      <p class="text-2xl font-semibold">อาชีพที่คุณอาจจะสนใจ</p>
+      <!-- <p class="text-2xl font-semibold">อาชีพที่คุณอาจจะสนใจ</p>
       <div class="grid grid-cols-4 gap-6 mt-6 mb-12">
         <div
           v-for="(recommend, indexRecommend) in recommendJob"
@@ -27,14 +27,17 @@
           <CardJob :name="recommend.name" :desc="recommend.desc" />
         </div>
       </div>
-      <Pagination />
+      <Pagination /> -->
     </div>
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
       <div class="grid grid-cols-4 gap-6 my-6">
         <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
           <NuxtLink :to="`/jobs/${job.careerId}`">
-            <CardJob :name="job.name" :desc="job.description" />
+            <CardJob
+              :category="job.categories[0].name"
+              :name="job.name"
+              :desc="job.description" />
           </NuxtLink>
         </div>
       </div>
