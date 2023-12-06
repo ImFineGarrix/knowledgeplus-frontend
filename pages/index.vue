@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <div class="space-y-10">
+    <div class="space-y-10" v-if="jobs.length">
       <TextSection
         text="ค้นหาอาชีพที่เหมาะกับตัวคุณ"
         text-button="ดูอาชีพทั้งหมด"
@@ -33,10 +33,13 @@
           <img src="/images/categories/it.png" />
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <div
-            v-for="(recommend, indexRecommend) in recommendJob"
-            :key="`recommend-job-${indexRecommend}`">
-            <CardJob :name="recommend.name" :desc="recommend.desc" />
+          <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
+            <NuxtLink :to="`/jobs/${job.careerId}`">
+              <CardJob
+                :category="job.categories[0].name"
+                :name="job.name"
+                :desc="job.description" />
+            </NuxtLink>
           </div>
         </div>
       </div>
@@ -62,54 +65,17 @@ import { useCategoryStore } from '~/stores/Categories'
 import { useLevelStore } from '~/stores/Levels'
 import CategoryProvider from '~/resources/CategoryProvider'
 import LevelProvider from '~/resources/LevelProvider'
+import JobProvider from '~/resources/JobProvider'
 
 export default {
   data() {
     return {
       LevelService: new LevelProvider(),
       CategoryService: new CategoryProvider(),
+      JobService: new JobProvider(),
       levelStore: useLevelStore(),
       categoryStore: useCategoryStore(),
-      recommendSkill: [
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'CodingCodingCodingCodingCodingCodingCodingCoding',
-          link: '/images/icon/good-code.png',
-        },
-      ],
-      recommendJob: [
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-      ],
+      jobs: [],
     }
   },
   mounted() {
@@ -119,6 +85,7 @@ export default {
     if (!this.levelStore.level.length) {
       this.getLevel()
     }
+    this.getJob()
   },
   methods: {
     async getCategory() {
@@ -131,6 +98,12 @@ export default {
       const status = await this.LevelService.getLevel()
       if (status.message === 'success') {
         this.levelStore.setLevel(status.data)
+      }
+    },
+    async getJob() {
+      const status = await this.JobService.getJob(1, 4)
+      if (status.message === 'success') {
+        this.jobs = status.data.careers
       }
     },
   },
