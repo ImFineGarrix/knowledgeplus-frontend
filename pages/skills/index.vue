@@ -9,24 +9,26 @@
       </div>
     </div>
     <div class="my-4">
-      <p class="text-2xl font-semibold">ทักษะแนะนำสำหรับคุณ</p>
-      <div class="grid grid-cols-5 gap-4 my-6 mt-12">
+      <!-- <p class="text-2xl font-semibold">ทักษะแนะนำสำหรับคุณ</p>
+      <div class="grid grid-cols-4 gap-4 my-6 mt-12">
         <div
           v-for="(recommend, indexRecommend) in recommendSkill"
           :key="`skill=recommend-${indexRecommend}`">
-          <CardSkill :name="recommend.name" :link="recommend.link" />
+          <CardSkill :name="recommend.name" :image="recommend.link" />
         </div>
       </div>
-      <Pagination />
+      <Pagination /> -->
     </div>
     <div>
       <p class="text-2xl font-semibold">ทักษะทั้งหมด</p>
-      <div class="grid grid-cols-5 gap-4 my-12">
+      <div class="grid grid-cols-4 gap-4 my-12">
         <div v-for="(skill, indexSkill) in skills" :key="`skill-${indexSkill}`">
           <NuxtLink :to="`/skills/${skill.skillId}`">
             <CardSkill
               :name="skill.name"
-              :link="`${config.public.firebaseBaseUrl}${skill.imageUrl}`" />
+              :desc="skill.description"
+              :level="skill.levelId"
+              :image="`${config.public.firebaseBaseUrl}${skill.imageUrl}`" />
           </NuxtLink>
         </div>
       </div>
@@ -45,10 +47,6 @@ export default {
       skills: [],
       config: useRuntimeConfig(),
       recommendSkill: [
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
         {
           name: 'Coding',
           link: '/images/icon/good-code.png',

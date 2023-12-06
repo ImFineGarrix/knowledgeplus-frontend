@@ -12,3 +12,14 @@
 .two-lines-ellipsis span {
   text-overflow: ellipsis;
 }
+
+.one-lines-ellipsis {
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.one-lines-ellipsis span {
+  text-overflow: ellipsis;
+}
