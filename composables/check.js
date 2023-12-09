@@ -1,6 +1,6 @@
 class UseCheck {
   checkEmpty(items) {
-    return !items
+    return !!items
   }
 }
 export default UseCheck
