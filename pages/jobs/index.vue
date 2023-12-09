@@ -31,7 +31,7 @@
     </div>
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
-      <div class="grid grid-cols-4 gap-6 my-6">
+      <div class="grid grid-cols-4 gap-6 my-6" v-if="Check.checkEmpty(jobs)">
         <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
           <NuxtLink :to="`/jobs/${job.careerId}`">
             <CardJob
@@ -41,12 +41,14 @@
           </NuxtLink>
         </div>
       </div>
+      <EmptyData v-else />
     </div>
   </div>
 </template>
 
 <script>
 import { useCategoryStore } from '~/stores/Categories'
+import UseCheck from '~/composables/check'
 import CategoryProvider from '~/resources/CategoryProvider'
 import JobProvider from '~/resources/JobProvider'
 
@@ -56,6 +58,7 @@ export default {
       CategoryService: new CategoryProvider(),
       JobService: new JobProvider(),
       categoryStore: useCategoryStore(),
+      Check: new UseCheck(),
       search: '',
       inputId: 0,
       jobs: [],
