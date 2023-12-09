@@ -21,7 +21,7 @@
     </div>
     <div>
       <p class="text-2xl font-semibold">ทักษะทั้งหมด</p>
-      <div class="grid grid-cols-4 gap-4 my-12">
+      <div class="grid grid-cols-4 gap-4 my-12" v-if="Check.checkEmpty(skills)">
         <div v-for="(skill, indexSkill) in skills" :key="`skill-${indexSkill}`">
           <NuxtLink :to="`/skills/${skill.skillId}`">
             <CardSkill
@@ -32,17 +32,20 @@
           </NuxtLink>
         </div>
       </div>
+      <EmptyData v-else />
     </div>
   </div>
 </template>
 
 <script>
 import { useRuntimeConfig } from 'nuxt/app'
+import UseCheck from '~/composables/check'
 import SkillProvider from '~/resources/SkillProvider'
 export default {
   data() {
     return {
       SkillService: new SkillProvider(),
+      Check: new UseCheck(),
       search: '1',
       skills: [],
       config: useRuntimeConfig(),
