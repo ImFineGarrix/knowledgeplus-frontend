@@ -4,14 +4,16 @@
       <div class="space-y-7">
         <p class="text-6xl font-semibold text-center font-poppin">JOBS</p>
         <div class="space-y-4">
-          <Search @input="handleSearch" placeholder="ค้นหาอาชีพที่คุณสนใจ" />
+          <Search
+            @update-search="handleSearch"
+            placeholder="ค้นหาอาชีพที่คุณสนใจ" />
           <div class="flex justify-center space-x-3">
             <div
               v-for="(category, indexCategory) in categoryStore.category"
               :key="`category-${indexCategory}`">
               <Button
                 :name="category.name"
-                :active="checkButtonActive(category.categoryId, inputId)"
+                :active="checkButtonActive(category.categoryId, categoryId)"
                 @click="setInputId(category.categoryId)" />
             </div>
           </div>
@@ -31,24 +33,31 @@
     </div>
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
-      <div class="grid grid-cols-4 gap-6 my-6" v-if="Check.checkEmpty(jobs)">
-        <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
-          <NuxtLink :to="`/jobs/${job.careerId}`">
-            <CardJob
-              :category="job.categories[0].name"
-              :name="job.name"
-              :desc="job.description" />
-          </NuxtLink>
+      <div v-if="ready">
+        <div
+          class="grid grid-cols-4 gap-6 my-6"
+          v-if="Composables.check.checkEmpty(jobs)">
+          <div v-for="(job, indexJob) in searchJob" :key="`job-${indexJob}`">
+            <NuxtLink :to="`/jobs/${job.careerId}`">
+              <CardJob
+                :category="job.categories[0].name"
+                :name="job.name"
+                :desc="job.description" />
+            </NuxtLink>
+          </div>
         </div>
+        <EmptyData
+          :active="Composables.check.checkSearch(search, categoryId)"
+          v-else />
       </div>
-      <EmptyData v-else />
+      <Loading v-else />
     </div>
   </div>
 </template>
 
 <script>
 import { useCategoryStore } from '~/stores/Categories'
-import UseCheck from '~/composables/check'
+import { MainComposables } from '~/composables/index'
 import CategoryProvider from '~/resources/CategoryProvider'
 import JobProvider from '~/resources/JobProvider'
 
@@ -58,29 +67,21 @@ export default {
       CategoryService: new CategoryProvider(),
       JobService: new JobProvider(),
       categoryStore: useCategoryStore(),
-      Check: new UseCheck(),
+      Composables: MainComposables(),
       search: '',
-      inputId: 0,
+      categoryId: 0,
       jobs: [],
-      recommendJob: [
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-        {
-          name: 'Front-End Developer',
-          desc: 'Lorem ipsum dolor sit amet consectetur. Nunc nec ultricies mauris lectus sollicitudin ut eget nam purus.',
-        },
-      ],
+      ready: false,
     }
+  },
+  computed: {
+    searchJob() {
+      return this.Composables.search.searchByTextAndCategory(
+        this.jobs,
+        this.search,
+        this.categoryId
+      )
+    },
   },
   mounted() {
     if (!this.categoryStore.category.length) {
@@ -93,6 +94,7 @@ export default {
       const status = await this.JobService.getJob(1, 9999)
       if (status.message === 'success') {
         this.jobs = status.data.careers
+        this.ready = true
       }
     },
     async getCategory() {
@@ -102,10 +104,10 @@ export default {
       }
     },
     handleSearch(newSearch) {
-      this.search = newSearch.target.value
+      this.search = newSearch.trim()
     },
     setInputId(id) {
-      this.inputId = id
+      this.categoryId = id
     },
     checkButtonActive(id, input) {
       return id === input

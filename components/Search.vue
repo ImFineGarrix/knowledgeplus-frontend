@@ -27,7 +27,7 @@ export default {
   methods: {
     updateSearch(e) {
       this.search = e.target.value
-      this.$emit('input', newVal)
+      this.$emit('update-search', e.target.value)
     },
   },
 }
