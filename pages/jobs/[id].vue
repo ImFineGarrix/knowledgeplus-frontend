@@ -8,9 +8,6 @@
           </p>
         </div>
         <p class="pt-2 text-6xl font-bold">{{ job.name }}</p>
-        <p class="text-[#319F43] text-base" v-if="job.shortDesc">
-          {{ `"${job.shortDesc}"` }}
-        </p>
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
