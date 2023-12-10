@@ -39,7 +39,7 @@
             </NuxtLink>
           </div>
         </div>
-        <EmptyData v-else />
+        <EmptyData v-else :active="Composables.check.checkSearch(search)" />
       </div>
       <Loading v-else />
     </div>
