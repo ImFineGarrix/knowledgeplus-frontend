@@ -41,6 +41,9 @@
             <NuxtLink :to="`/jobs/${job.careerId}`">
               <CardJob
                 :category="job.categories[0].name"
+                :category2="
+                  job.categories.length > 1 ? job.categories[1].name : ''
+                "
                 :name="job.name"
                 :desc="job.description" />
             </NuxtLink>

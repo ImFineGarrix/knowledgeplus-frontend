@@ -1,10 +1,16 @@
 <template>
   <div
     class="h-56 transition-all bg-white border shadow-lg cursor-pointer rounded-2xl hover:scale-105">
-    <div class="flex pt-7 px-7">
+    <div class="flex pt-7 px-7 space-x-2">
       <p
+        v-if="category"
         class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43]">
         {{ category }}
+      </p>
+      <p
+        v-if="category2"
+        class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43]">
+        {{ category2 }}
       </p>
     </div>
     <div class="px-8 py-4">
@@ -34,6 +40,10 @@ export default {
       default: () => '',
     },
     category: {
+      type: String,
+      default: () => '',
+    },
+    category2: {
       type: String,
       default: () => '',
     },

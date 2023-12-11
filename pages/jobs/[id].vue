@@ -2,9 +2,14 @@
   <div class="my-6 space-y-10">
     <div class="flex items-center gap-10">
       <div class="w-7/12 space-y-2">
-        <div class="flex">
+        <div class="flex space-x-2">
           <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
             {{ job.categories[0].name }}
+          </p>
+          <p
+            class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full"
+            v-if="job.categories.length > 1">
+            {{ job.categories[1].name }}
           </p>
         </div>
         <p class="pt-2 text-6xl font-bold">{{ job.name }}</p>
