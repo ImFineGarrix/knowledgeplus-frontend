@@ -72,7 +72,7 @@ export default {
   },
   methods: {
     async getSkill() {
-      const status = await this.SkillService.getSkill()
+      const status = await this.SkillService.getSkill(1, 9999)
       if (status.message === 'success') {
         this.skills = status.data.skills
         this.ready = true
