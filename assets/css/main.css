@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  scroll-behavior: smooth;
+  scroll-padding: 10rem;
+}
+
 .two-lines-ellipsis {
   display: -webkit-box;
   -webkit-line-clamp: 2;

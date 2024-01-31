@@ -1,8 +1,8 @@
 import HttpRequest from './HttpRequest'
 
-class JobProvider extends HttpRequest {
+class CareerProvider extends HttpRequest {
 
-  async getJob(page, limit) {
+  async getCareer(page, limit) {
     try {
       const data = await this.get(`/careers_have_categories?page=${page}&limit=${limit}`)
       return {
@@ -18,7 +18,7 @@ class JobProvider extends HttpRequest {
     }
   }
 
-  async getJobById(id) {
+  async getCareerById(id) {
     try {
       const data = await this.get(`/careers/${id}`)
       return {
@@ -35,4 +35,4 @@ class JobProvider extends HttpRequest {
   }
 }
 
-export default JobProvider
+export default CareerProvider

@@ -23,22 +23,24 @@
         </div>
       </div>
     </div>
-    <div class="space-y-10" v-if="jobs.length">
+    <div class="space-y-10" v-if="careers.length">
       <TextSection
         text="ค้นหาอาชีพที่เหมาะกับตัวคุณ"
         text-button="ดูอาชีพทั้งหมด"
-        link="/jobs" />
+        link="/careers" />
       <div class="grid grid-cols-2">
         <div class="flex items-center justify-start">
           <img src="/images/categories/it.png" />
         </div>
         <div class="grid grid-cols-2 gap-4">
-          <div v-for="(job, indexJob) in jobs" :key="`job-${indexJob}`">
-            <NuxtLink :to="`/jobs/${job.careerId}`">
-              <CardJob
-                :category="job.categories[0].name"
-                :name="job.name"
-                :desc="job.description" />
+          <div
+            v-for="(career, indexCareer) in careers"
+            :key="`career-${indexCareer}`">
+            <NuxtLink :to="`/careers/${career.careerId}`">
+              <CardCareer
+                :category="career.categories[0].name"
+                :name="career.name"
+                :desc="career.description" />
             </NuxtLink>
           </div>
         </div>
@@ -65,17 +67,17 @@ import { useCategoryStore } from '~/stores/Categories'
 import { useLevelStore } from '~/stores/Levels'
 import CategoryProvider from '~/resources/CategoryProvider'
 import LevelProvider from '~/resources/LevelProvider'
-import JobProvider from '~/resources/JobProvider'
+import CareerProvider from '~/resources/CareerProvider'
 
 export default {
   data() {
     return {
       LevelService: new LevelProvider(),
       CategoryService: new CategoryProvider(),
-      JobService: new JobProvider(),
+      CareerService: new CareerProvider(),
       levelStore: useLevelStore(),
       categoryStore: useCategoryStore(),
-      jobs: [],
+      careers: [],
     }
   },
   mounted() {
@@ -85,7 +87,7 @@ export default {
     if (!this.levelStore.level.length) {
       this.getLevel()
     }
-    this.getJob()
+    this.getCareer()
   },
   methods: {
     async getCategory() {
@@ -100,10 +102,10 @@ export default {
         this.levelStore.setLevel(status.data)
       }
     },
-    async getJob() {
-      const status = await this.JobService.getJob(1, 4)
+    async getCareer() {
+      const status = await this.CareerService.getCareer(1, 4)
       if (status.message === 'success') {
-        this.jobs = status.data.careers
+        this.careers = status.data.careers
       }
     },
   },

@@ -1,6 +1,6 @@
 <template>
   <div class="space-y-12">
-    <div id="header-jobs" class="flex justify-center mt-16">
+    <div id="header-skills" class="flex justify-center mt-16">
       <div class="space-y-7">
         <p class="text-6xl font-semibold text-center font-poppin">SKILLS</p>
         <div class="space-y-4">
@@ -9,17 +9,6 @@
             placeholder="ค้นหาทักษะคุณสนใจ" />
         </div>
       </div>
-    </div>
-    <div class="my-4">
-      <!-- <p class="text-2xl font-semibold">ทักษะแนะนำสำหรับคุณ</p>
-      <div class="grid grid-cols-4 gap-4 my-6 mt-12">
-        <div
-          v-for="(recommend, indexRecommend) in recommendSkill"
-          :key="`skill=recommend-${indexRecommend}`">
-          <CardSkill :name="recommend.name" :image="recommend.link" />
-        </div>
-      </div>
-      <Pagination /> -->
     </div>
     <div>
       <p class="text-2xl font-semibold">ทักษะทั้งหมด</p>
