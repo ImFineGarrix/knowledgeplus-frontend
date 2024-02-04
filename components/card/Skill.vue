@@ -13,10 +13,11 @@
           <img :src="image" class="w-auto h-10" />
         </div>
         <div>
-          <p class="text-xl font-semibold leading-5">
-            {{ name }}
-          </p>
-          <div class="my-2 text-xs font-thin one-lines-ellipsis">
+          <div class="text-xl font-semibold leading-5 two-lines-ellipsis">
+            <span>{{ name }}</span>
+          </div>
+          <div
+            class="my-2 text-xs font-normal text-gray-500 one-lines-ellipsis">
             <span>{{ desc }}</span>
           </div>
         </div>

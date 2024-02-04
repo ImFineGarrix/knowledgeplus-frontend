@@ -1,19 +1,19 @@
 import { defineStore } from 'pinia'
 
-export const useJobStore = defineStore('job', {
+export const useCareerStore = defineStore('career', {
   state: () => ({
-    jobs: [],
+    careers: [],
     recommends: []
   }),
 
   getters: {
-    job: (state) => state.jobs,
+    career: (state) => state.careers,
     recommend: (state) => state.recommends
   },
 
   actions: {
-    setJob(item) {
-      this.jobs = item
+    setCareer(item) {
+      this.careers = item
     },
     setRecommended(item) {
       this.recommends = item

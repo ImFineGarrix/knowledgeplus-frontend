@@ -1,8 +1,8 @@
 <template>
   <div class="space-y-12">
-    <div id="header-jobs" class="flex justify-center mt-16">
+    <div id="header-careers" class="flex justify-center mt-16">
       <div class="space-y-7">
-        <p class="text-6xl font-semibold text-center font-poppin">JOBS</p>
+        <p class="text-6xl font-semibold text-center font-poppin">CAREERS</p>
         <div class="space-y-4">
           <Search
             @update-search="handleSearch"
@@ -20,32 +20,23 @@
         </div>
       </div>
     </div>
-    <div class="my-4">
-      <!-- <p class="text-2xl font-semibold">อาชีพที่คุณอาจจะสนใจ</p>
-      <div class="grid grid-cols-4 gap-6 mt-6 mb-12">
-        <div
-          v-for="(recommend, indexRecommend) in recommendJob"
-          :key="`job-recommend-${indexRecommend}`">
-          <CardJob :name="recommend.name" :desc="recommend.desc" />
-        </div>
-      </div>
-      <Pagination /> -->
-    </div>
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
       <div v-if="ready">
         <div
           class="grid grid-cols-4 gap-6 my-6"
-          v-if="Composables.check.checkEmpty(jobs)">
-          <div v-for="(job, indexJob) in searchJob" :key="`job-${indexJob}`">
-            <NuxtLink :to="`/jobs/${job.careerId}`">
-              <CardJob
-                :category="job.categories[0].name"
+          v-if="Composables.check.checkEmpty(careers)">
+          <div
+            v-for="(career, indexCareer) in searchCareer"
+            :key="`career-${indexCareer}`">
+            <NuxtLink :to="`/careers/${career.careerId}`">
+              <CardCareer
+                :category="career.categories[0].name"
                 :category2="
-                  job.categories.length > 1 ? job.categories[1].name : ''
+                  career.categories.length > 1 ? career.categories[1].name : ''
                 "
-                :name="job.name"
-                :desc="job.description" />
+                :name="career.name"
+                :desc="career.description" />
             </NuxtLink>
           </div>
         </div>
@@ -62,25 +53,25 @@
 import { useCategoryStore } from '~/stores/Categories'
 import { MainComposables } from '~/composables/index'
 import CategoryProvider from '~/resources/CategoryProvider'
-import JobProvider from '~/resources/JobProvider'
+import CareerProvider from '~/resources/CareerProvider'
 
 export default {
   data() {
     return {
       CategoryService: new CategoryProvider(),
-      JobService: new JobProvider(),
+      CareerService: new CareerProvider(),
       categoryStore: useCategoryStore(),
       Composables: MainComposables(),
       search: '',
       categoryId: 0,
-      jobs: [],
+      careers: [],
       ready: false,
     }
   },
   computed: {
-    searchJob() {
+    searchCareer() {
       return this.Composables.search.searchByTextAndCategory(
-        this.jobs,
+        this.careers,
         this.search,
         this.categoryId
       )
@@ -90,13 +81,13 @@ export default {
     if (!this.categoryStore.category.length) {
       this.getCategory()
     }
-    this.getJob()
+    this.getCareer()
   },
   methods: {
-    async getJob() {
-      const status = await this.JobService.getJob(1, 9999)
+    async getCareer() {
+      const status = await this.CareerService.getCareer(1, 9999)
       if (status.message === 'success') {
-        this.jobs = status.data.careers
+        this.careers = status.data.careers
         this.ready = true
       }
     },
@@ -118,5 +109,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped></style>

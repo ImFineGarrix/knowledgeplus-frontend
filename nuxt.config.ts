@@ -14,6 +14,7 @@ export default defineNuxtConfig({
     head: {
       titleTemplate: 'KNOWLEDGE+',
     },
+    baseURL: '/sj2'
   },
   runtimeConfig: {
     public: {

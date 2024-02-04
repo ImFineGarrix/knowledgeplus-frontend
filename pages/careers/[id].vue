@@ -4,20 +4,20 @@
       <div class="w-7/12 space-y-2">
         <div class="flex space-x-2">
           <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
-            {{ job.categories[0].name }}
+            {{ career.categories[0].name }}
           </p>
           <p
             class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full"
-            v-if="job.categories.length > 1">
-            {{ job.categories[1].name }}
+            v-if="career.categories.length > 1">
+            {{ career.categories[1].name }}
           </p>
         </div>
-        <p class="pt-2 text-6xl font-bold">{{ job.name }}</p>
+        <p class="pt-2 text-6xl font-bold">{{ career.name }}</p>
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
         <p class="w-10/12 text-sm text-gray-600">
-          {{ job.description }}
+          {{ career.description }}
         </p>
       </div>
       <div class="w-5/12">
@@ -38,9 +38,9 @@
       <div class="mb-4">
         <div
           class="grid grid-cols-4 gap-4 my-6 mt-[28px]"
-          v-if="job.skills.length">
+          v-if="career.skills.length">
           <div
-            v-for="(skill, indexSkill) in job.skills"
+            v-for="(skill, indexSkill) in career.skills"
             :key="`skill-${indexSkill}`">
             <NuxtLink :to="`/skills/${skill.skillId}`">
               <CardSkill
@@ -62,15 +62,15 @@
   </div>
 </template>
 <script>
-import JobProvider from '~/resources/JobProvider'
+import CareerProvider from '~/resources/CareerProvider'
 import { useRuntimeConfig } from 'nuxt/app'
 
 export default {
   data() {
     return {
-      JobService: new JobProvider(),
+      CareerService: new CareerProvider(),
       config: useRuntimeConfig(),
-      job: {
+      career: {
         name: '',
         description: '',
         shortDesc: '',
@@ -106,19 +106,20 @@ export default {
       return this.$route.params.id || ''
     },
     imageUrl() {
-      return `${this.config.public.firebaseBaseUrl}${this.job.categories[0].imageUrl}`
+      return `${this.config.public.firebaseBaseUrl}${this.career.categories[0].imageUrl}`
     },
   },
   mounted() {
-    this.getJobById(this.idParams)
+    this.getCareerById(this.idParams)
   },
   methods: {
-    async getJobById(id) {
-      const status = await this.JobService.getJobById(id)
+    async getCareerById(id) {
+      const status = await this.CareerService.getCareerById(id)
       if (status.message === 'success') {
-        this.job = status.data
+        this.career = status.data
       }
     },
   },
 }
 </script>
+~/resources/CareerProvider
