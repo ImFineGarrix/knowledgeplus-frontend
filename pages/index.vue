@@ -65,7 +65,7 @@
 <script>
 import { useCategoryStore } from '~/stores/Categories'
 import { useLevelStore } from '~/stores/Levels'
-import CategoryProvider from '~/resources/CategoryProvider'
+import SectionProvider from '~/resources/SectionProvider'
 import LevelProvider from '~/resources/LevelProvider'
 import CareerProvider from '~/resources/CareerProvider'
 
@@ -73,7 +73,7 @@ export default {
   data() {
     return {
       LevelService: new LevelProvider(),
-      CategoryService: new CategoryProvider(),
+      SectionService: new SectionProvider(),
       CareerService: new CareerProvider(),
       levelStore: useLevelStore(),
       categoryStore: useCategoryStore(),
@@ -82,7 +82,7 @@ export default {
   },
   mounted() {
     if (!this.categoryStore.category.length) {
-      this.getCategory()
+      this.getSection()
     }
     if (!this.levelStore.level.length) {
       this.getLevel()
@@ -90,8 +90,8 @@ export default {
     this.getCareer()
   },
   methods: {
-    async getCategory() {
-      const status = await this.CategoryService.getCategory()
+    async getSection() {
+      const status = await this.SectionService.getSection()
       if (status.message === 'success') {
         this.categoryStore.setCategory(status.data)
       }
@@ -113,3 +113,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
+~/resources/SectionProvider

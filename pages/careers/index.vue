@@ -52,13 +52,13 @@
 <script>
 import { useCategoryStore } from '~/stores/Categories'
 import { MainComposables } from '~/composables/index'
-import CategoryProvider from '~/resources/CategoryProvider'
+import SectionProvider from '~/resources/SectionProvider'
 import CareerProvider from '~/resources/CareerProvider'
 
 export default {
   data() {
     return {
-      CategoryService: new CategoryProvider(),
+      SectionService: new SectionProvider(),
       CareerService: new CareerProvider(),
       categoryStore: useCategoryStore(),
       Composables: MainComposables(),
@@ -79,7 +79,7 @@ export default {
   },
   mounted() {
     if (!this.categoryStore.category.length) {
-      this.getCategory()
+      this.getSection()
     }
     this.getCareer()
   },
@@ -91,8 +91,8 @@ export default {
         this.ready = true
       }
     },
-    async getCategory() {
-      const status = await this.CategoryService.getCategory()
+    async getSection() {
+      const status = await this.SectionService.getSection()
       if (status.message === 'success') {
         this.categoryStore.setCategory(status.data)
       }
@@ -109,3 +109,4 @@ export default {
   },
 }
 </script>
+~/resources/SectionProvider
