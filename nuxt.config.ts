@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     head: {
       titleTemplate: 'KNOWLEDGE+',
     },
-    baseURL: '/sj2'
+    baseURL: process.env.BASE_URL,
   },
   runtimeConfig: {
     public: {
