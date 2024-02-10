@@ -1,18 +1,25 @@
 pipeline {
     agent any
 
-    stages {
-       stage('Remove') {
-            steps {
-                script {
-                    sh '''
-                        docker rm -f nuxt-container-${ENV} || true
-                        docker image prune -af
-                    '''
-                    echo ${ENV}
+    stage('Remove') {
+        steps {
+            script {
+                def containerExists = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}'", returnStatus: true).trim()
+
+                if (containerExists) {
+                    echo "Container nuxt-container-${ENV} found. Removing..."
+                    sh "docker rm -f nuxt-container-${ENV}"
+                } else {
+                    echo "Container nuxt-container-${ENV} not found."
                 }
+
+                sh "docker image prune -af"
+                
+                echo ${ENV}
             }
         }
+    }
+}
     stage('Build') {
     steps {
         script {
