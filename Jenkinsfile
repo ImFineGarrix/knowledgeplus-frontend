@@ -1,6 +1,7 @@
 pipeline {
     agent any
 
+stages {
     stage('Remove') {
         steps {
             script {
@@ -13,13 +14,14 @@ pipeline {
                     echo "Container nuxt-container-${ENV} not found."
                 }
 
+                // Optionally, prune unused images
                 sh "docker image prune -af"
                 
                 echo ${ENV}
             }
         }
     }
-}
+    
     stage('Build') {
     steps {
         script {
