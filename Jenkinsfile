@@ -2,10 +2,10 @@ pipeline {
     agent any
 
 stages {
-    stage('Remove') {
+     stage('Remove') {
             steps {
                 script {
-                    def containerExistsExitCode = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}'", returnStatus: true)
+                    def containerExistsExitCode = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}' || true", returnStatus: true)
 
                     if (containerExistsExitCode == 0) {
                         echo "Container nuxt-container-${ENV} not found. Skipping removal..."
@@ -17,11 +17,14 @@ stages {
                     // Optionally, prune unused images
                     sh "docker image prune -af"
 
-                    echo ${ENV}
+                    // Use either of the following to print the value of ENV
+                    echo "${ENV}"
+                    // or
+                    // echo ${ENV}
                 }
             }
         }
-    
+    }
     stage('Build') {
     steps {
         script {
