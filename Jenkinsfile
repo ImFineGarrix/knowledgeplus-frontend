@@ -24,7 +24,6 @@ stages {
                 }
             }
         }
-    }
     stage('Build') {
     steps {
         script {
