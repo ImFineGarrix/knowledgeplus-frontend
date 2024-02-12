@@ -3,24 +3,24 @@ pipeline {
 
 stages {
     stage('Remove') {
-        steps {
-            script {
-                def containerExists = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}'", returnStatus: true).trim()
+            steps {
+                script {
+                    def containerExistsExitCode = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}'", returnStatus: true)
 
-                if (containerExists) {
-                    echo "Container nuxt-container-${ENV} found. Removing..."
-                    sh "docker rm -f nuxt-container-${ENV}"
-                } else {
-                    echo "Container nuxt-container-${ENV} not found."
+                    if (containerExistsExitCode == 0) {
+                        echo "Container nuxt-container-${ENV} not found. Skipping removal..."
+                    } else {
+                        echo "Container nuxt-container-${ENV} found. Removing..."
+                        sh "docker rm -f nuxt-container-${ENV}"
+                    }
+
+                    // Optionally, prune unused images
+                    sh "docker image prune -af"
+
+                    echo ${ENV}
                 }
-
-                // Optionally, prune unused images
-                sh "docker image prune -af"
-                
-                echo ${ENV}
             }
         }
-    }
     
     stage('Build') {
     steps {
