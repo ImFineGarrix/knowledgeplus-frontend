@@ -19,7 +19,9 @@
       </div>
       <div class="col-span-2">
         <div class="flex items-center justify-end">
-          <img src="/images/homepage.png" class="w-[650px] ml-2" />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/knowledge-project-7e224.appspot.com/o/homepage.png?alt=media&token=65838527-c734-4116-9548-6f5a5a43e910"
+            class="w-[650px] ml-2" />
         </div>
       </div>
     </div>
@@ -30,7 +32,8 @@
         link="/careers" />
       <div class="grid grid-cols-2">
         <div class="flex items-center justify-start">
-          <img src="/images/categories/it.png" />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/knowledge-project-7e224.appspot.com/o/it.png?alt=media&token=9fc5261d-9cc2-48a4-bfe3-61d2c20433ad" />
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div
