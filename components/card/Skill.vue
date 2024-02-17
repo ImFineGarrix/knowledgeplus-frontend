@@ -4,7 +4,7 @@
     <div class="flex mx-5 mt-4">
       <p
         class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43] uppercase">
-        {{ levelStore.getLevelNameById(level) }}
+        {{ LevelStore.getLevelNameById(level) }}
       </p>
     </div>
     <div class="px-8 py-5">
@@ -50,19 +50,19 @@ export default {
   },
   data() {
     return {
-      levelStore: useLevelStore(),
+      LevelStore: useLevelStore(),
       LevelService: new LevelProvider(),
     }
   },
   mounted() {
-    if (!this.levelStore.level.length) {
+    if (!this.LevelStore.level.length) {
       this.getLevel()
     }
   },
   methods: {
     async getLevel() {
       const { data } = await this.LevelService.getLevel()
-      this.levelStore.setLevel(data)
+      this.LevelStore.setLevel(data)
     },
   },
 }

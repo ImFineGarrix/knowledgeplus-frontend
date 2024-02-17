@@ -4,7 +4,7 @@
       <div class="w-7/12 space-y-2">
         <div class="flex">
           <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
-            {{ levelStore.getLevelNameById(skill.levelId) }}
+            {{ LevelStore.getLevelNameById(skill.levelId) }}
           </p>
         </div>
         <p class="pt-1 text-6xl font-bold">
@@ -29,7 +29,7 @@
           <Explain
             id="description"
             title="Description"
-            desc="Lorem Ipsum description of the skill description" />
+            :desc="skill.description" />
           <Explain
             id="knowledge"
             title="Knowledge"
@@ -73,7 +73,6 @@
             NO CAREER
           </p>
         </div>
-        <!-- <Pagination /> -->
       </div>
     </div>
   </div>
@@ -91,7 +90,7 @@ export default {
       LevelService: new LevelProvider(),
       SkillService: new SkillProvider(),
       CareerService: new CareerProvider(),
-      levelStore: useLevelStore(),
+      LevelStore: useLevelStore(),
       config: useRuntimeConfig(),
       skill: {
         name: '',
@@ -122,7 +121,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.levelStore.level.length) {
+    if (!this.LevelStore.level.length) {
       this.getLevel()
     }
     this.getSkillById(this.idParams)
@@ -138,7 +137,7 @@ export default {
     async getLevel() {
       const status = await this.LevelService.getLevel()
       if (status.message === 'success') {
-        this.levelStore.setLevel(status.data)
+        this.LevelStore.setLevel(status.data)
       }
     },
     async getCareer() {

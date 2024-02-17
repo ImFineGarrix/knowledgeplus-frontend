@@ -17,6 +17,11 @@
           illum sint fugiat tempora eum, in fuga. Iusto eligendi quaerat
           recusandae saepe corrupti?
         </p>
+        <div class="flex py-6">
+          <p class="px-10 py-2 text-white rounded-lg shadow-lg bg-emerald-600">
+            REGISTER
+          </p>
+        </div>
       </div>
       <div class="w-5/12">
         <img src="/images/kmutt-logo.png" class="object-contain w-full h-96" />
@@ -29,14 +34,6 @@
             id="description"
             title="Description"
             desc="Lorem Ipsum description of the skill description" />
-          <Explain
-            id="knowledge"
-            title="Knowledge"
-            desc="Lorem Ipsum description of the skill description" />
-          <Explain
-            id="ability"
-            title="Ability"
-            desc="Lorem Ipsum description of the skill description Lorem Ipsum description of the skill descriptionLorem Ipsum description of the skill descriptionLorem Ipsum description of the skill description" />
           <Explain
             id="learning"
             title="Learning Outcome"
@@ -61,14 +58,6 @@ export default {
         {
           label: 'Description',
           val: 'description'
-        },
-        {
-          label: 'Knowledge',
-          val: 'knowledge'
-        },
-        {
-          label: 'Ability',
-          val: 'ability'
         },
         {
           label: 'Learning Outcome',

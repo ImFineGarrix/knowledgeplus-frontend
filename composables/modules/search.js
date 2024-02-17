@@ -10,7 +10,7 @@ class SearchModule {
 
     return items.filter((item) => {
       const searchText = item.name.toLowerCase().includes(text.toLowerCase())
-      const searchSection = item.categories.some((category) => category.sectionId === sectionId)
+      const searchSection = item.categories.some((category) => category.categoryId === sectionId)
 
       return searchText && (searchSection || !sectionId)
     })

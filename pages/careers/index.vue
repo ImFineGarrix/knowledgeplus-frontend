@@ -9,7 +9,7 @@
             placeholder="ค้นหาอาชีพที่คุณสนใจ" />
           <div class="flex justify-center space-x-3">
             <div
-              v-for="(category, indexCategory) in categoryStore.category"
+              v-for="(category, indexCategory) in SectionStore.category"
               :key="`category-${indexCategory}`">
               <Button
                 :name="category.name"
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { useCategoryStore } from '~/stores/Categories'
+import { useSectionStore } from '~/stores/Sections'
 import { MainComposables } from '~/composables/index'
 import SectionProvider from '~/resources/SectionProvider'
 import CareerProvider from '~/resources/CareerProvider'
@@ -60,7 +60,7 @@ export default {
     return {
       SectionService: new SectionProvider(),
       CareerService: new CareerProvider(),
-      categoryStore: useCategoryStore(),
+      SectionStore: useSectionStore(),
       Composables: MainComposables(),
       search: '',
       categoryId: 0,
@@ -70,7 +70,7 @@ export default {
   },
   computed: {
     searchCareer() {
-      return this.Composables.search.searchByTextAndCategory(
+      return this.Composables.search.searchByTextAndSection(
         this.careers,
         this.search,
         this.categoryId
@@ -78,7 +78,7 @@ export default {
     },
   },
   mounted() {
-    if (!this.categoryStore.category.length) {
+    if (!this.SectionStore.category.length) {
       this.getSection()
     }
     this.getCareer()
@@ -94,7 +94,7 @@ export default {
     async getSection() {
       const status = await this.SectionService.getSection()
       if (status.message === 'success') {
-        this.categoryStore.setCategory(status.data)
+        this.SectionStore.setSection(status.data)
       }
     },
     handleSearch(newSearch) {
@@ -109,4 +109,4 @@ export default {
   },
 }
 </script>
-~/resources/SectionProvider
+~/resources/SectionProvider ~/stores/Sections

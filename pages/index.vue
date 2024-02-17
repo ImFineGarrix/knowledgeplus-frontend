@@ -19,7 +19,9 @@
       </div>
       <div class="col-span-2">
         <div class="flex items-center justify-end">
-          <img src="/images/homepage.png" class="w-[650px] ml-2" />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/knowledge-project-7e224.appspot.com/o/homepage.png?alt=media&token=65838527-c734-4116-9548-6f5a5a43e910"
+            class="w-[650px] ml-2" />
         </div>
       </div>
     </div>
@@ -30,7 +32,8 @@
         link="/careers" />
       <div class="grid grid-cols-2">
         <div class="flex items-center justify-start">
-          <img src="/images/categories/it.png" />
+          <img
+            src="https://firebasestorage.googleapis.com/v0/b/knowledge-project-7e224.appspot.com/o/it.png?alt=media&token=9fc5261d-9cc2-48a4-bfe3-61d2c20433ad" />
         </div>
         <div class="grid grid-cols-2 gap-4">
           <div
@@ -46,24 +49,10 @@
         </div>
       </div>
     </div>
-    <!-- Recommend Skill -->
-    <!-- <div class="space-y-10">
-      <TextSection
-        text="ทักษะที่เหมาะสำหรับสาย IT"
-        textButton="ดูทักษะทั้งหมด"
-        link="/skills" />
-      <div class="grid grid-cols-5">
-        <div
-          v-for="(recommend, indexRecommend) in recommendSkill"
-          :key="`recommend-skill=${indexRecommend}`">
-          <CardSkill :name="recommend.name" :link="recommend.link" />
-        </div>
-      </div>
-    </div> -->
   </div>
 </template>
 <script>
-import { useCategoryStore } from '~/stores/Categories'
+import { useSectionStore } from '~/stores/Sections'
 import { useLevelStore } from '~/stores/Levels'
 import SectionProvider from '~/resources/SectionProvider'
 import LevelProvider from '~/resources/LevelProvider'
@@ -75,16 +64,16 @@ export default {
       LevelService: new LevelProvider(),
       SectionService: new SectionProvider(),
       CareerService: new CareerProvider(),
-      levelStore: useLevelStore(),
-      categoryStore: useCategoryStore(),
+      LevelStore: useLevelStore(),
+      SectionStore: useSectionStore(),
       careers: [],
     }
   },
   mounted() {
-    if (!this.categoryStore.category.length) {
+    if (!this.SectionStore.category.length) {
       this.getSection()
     }
-    if (!this.levelStore.level.length) {
+    if (!this.LevelStore.level.length) {
       this.getLevel()
     }
     this.getCareer()
@@ -93,13 +82,13 @@ export default {
     async getSection() {
       const status = await this.SectionService.getSection()
       if (status.message === 'success') {
-        this.categoryStore.setCategory(status.data)
+        this.SectionStore.setSection(status.data)
       }
     },
     async getLevel() {
       const status = await this.LevelService.getLevel()
       if (status.message === 'success') {
-        this.levelStore.setLevel(status.data)
+        this.LevelStore.setLevel(status.data)
       }
     },
     async getCareer() {
@@ -113,4 +102,4 @@ export default {
 </script>
 
 <style lang="scss" scoped></style>
-~/resources/SectionProvider
+~/resources/SectionProvider ~/stores/Sections
