@@ -14,7 +14,7 @@
             :href="course.courseLink"
             target="_blank"
             class="px-10 py-2 text-white transition-all rounded-lg shadow-lg bg-emerald-600 hover:scale-105">
-            REGISTER
+            SEE MORE
           </a>
         </div>
       </div>
