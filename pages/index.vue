@@ -41,22 +41,42 @@
             :key="`career-${indexCareer}`">
             <NuxtLink :to="`/careers/${career.careerId}`">
               <CardCareer
-                :category="career.categories[0].name"
+                :group="career.groups[0].name"
                 :name="career.name"
-                :desc="career.description" />
+                :desc="career.description || '-'" />
             </NuxtLink>
           </div>
+        </div>
+      </div>
+    </div>
+    <div class="space-y-10" v-if="courses.length">
+      <TextSection
+        text="คอร์สที่เปิดสอน"
+        text-button="ดูคอร์สทั้งหมด"
+        link="/courses" />
+      <div class="grid grid-cols-4 gap-6 my-6">
+        <div
+          v-for="(course, indexCourse) in courses"
+          :key="`course-${indexCourse}`">
+          <NuxtLink :to="`/courses/${course.courseId}`">
+            <CardCourse
+              :name="course.name"
+              :desc="course.description"
+              :image="course?.organization?.imageUrl || ''"
+              :organization-name="course?.organization?.name || ''" />
+          </NuxtLink>
         </div>
       </div>
     </div>
   </div>
 </template>
 <script>
-import { useSectionStore } from '~/stores/Sections'
-import { useLevelStore } from '~/stores/Levels'
+import { MainStores } from '~/stores'
 import SectionProvider from '~/resources/SectionProvider'
 import LevelProvider from '~/resources/LevelProvider'
 import CareerProvider from '~/resources/CareerProvider'
+import GroupProvider from '~/resources/GroupProvider'
+import CourseProvider from '~/resources/CourseProvider'
 
 export default {
   data() {
@@ -64,31 +84,43 @@ export default {
       LevelService: new LevelProvider(),
       SectionService: new SectionProvider(),
       CareerService: new CareerProvider(),
-      LevelStore: useLevelStore(),
-      SectionStore: useSectionStore(),
+      GroupService: new GroupProvider(),
+      CourseService: new CourseProvider(),
+      Stores: MainStores(),
       careers: [],
+      courses: []
     }
   },
   mounted() {
-    if (!this.SectionStore.category.length) {
+    if (!this.Stores.SectionStore.sections.length) {
       this.getSection()
     }
-    if (!this.LevelStore.level.length) {
+    if (!this.Stores.LevelStore.level.length) {
       this.getLevel()
     }
+    if (!this.Stores.GroupStore.group.length) {
+
+    }
     this.getCareer()
+    this.getCourse()
   },
   methods: {
     async getSection() {
       const status = await this.SectionService.getSection()
       if (status.message === 'success') {
-        this.SectionStore.setSection(status.data)
+        this.Stores.SectionStore.setSection(status.data)
       }
     },
     async getLevel() {
       const status = await this.LevelService.getLevel()
       if (status.message === 'success') {
-        this.LevelStore.setLevel(status.data)
+        this.Stores.LevelStore.setLevel(status.data)
+      }
+    },
+    async getGroup() {
+      const status = await this.GroupService.getGroup()
+      if (status.message === 'success') {
+        this.Stores.GroupStore.setGroup(status.data)
       }
     },
     async getCareer() {
@@ -97,9 +129,12 @@ export default {
         this.careers = status.data.careers
       }
     },
+    async getCourse () {
+      const status = await this.CourseService.getCourse(1, 4)
+      if (status.message === 'success') {
+        this.courses = status.data.courses
+      }
+    }
   },
 }
 </script>
-
-<style lang="scss" scoped></style>
-~/resources/SectionProvider ~/stores/Sections

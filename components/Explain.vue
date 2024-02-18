@@ -8,22 +8,31 @@
         <div
           v-for="(descLevel, indexDescLevel) in descLevels"
           :key="`desc-level-${indexDescLevel}`">
-          <p>Level: 1</p>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Tempora,
-            repudiandae deserunt id quasi, alias nemo architecto error ex
-            quaerat veniam temporibus consequuntur, voluptatum voluptatem
-            tenetur dolorem quod esse accusamus illum.
+          <p class="mt-6 text-2xl font-bold">
+            Level: {{ Stores.LevelStore.getLevelNameById(descLevel.levelId) }}
           </p>
+          <div>
+            <p class="mt-2 text-base" v-if="descLevel.desc">
+              {{ descLevel.desc }}
+            </p>
+            <p v-else>-</p>
+          </div>
         </div>
       </div>
       <div v-else class="my-4 ml-4 mr-10">
-        <div>{{ desc }}</div>
+        <div v-if="haveImage" class="flex items-center text-lg">
+          <img :src="`${config.public.firebaseBaseUrl}${image}`" class="w-10" />
+          <p class="font-medium">{{ desc }}</p>
+        </div>
+        <div v-else class="text-lg">{{ desc }}</div>
       </div>
     </div>
   </div>
 </template>
 <script>
+import { MainStores } from '~/stores'
+import { useRuntimeConfig } from 'nuxt/app'
+
 export default {
   props: {
     title: {
@@ -41,7 +50,21 @@ export default {
     descLevels: {
       type: Array,
       default: () => []
+    },
+    haveImage: {
+      type: Boolean,
+      default: () => false
+    },
+    image: {
+      type: String,
+      default: () => ''
     }
-  }
+  },
+  data () {
+    return {
+      Stores: MainStores(),
+      config: useRuntimeConfig()
+    }
+  },
 }
 </script>

@@ -1,10 +1,10 @@
 import HttpRequest from './HttpRequest'
 
-class CareerProvider extends HttpRequest {
+class CourseProvider extends HttpRequest {
 
-  async getCareer(page, limit, search = '', group = 0) {
+  async getCourse(page, limit, search = '') {
     try {
-      const data = await this.get(`/careers?page=${page}&limit=${limit}&search=${search}&group=${group}`)
+      const data = await this.get(`/courses?page=${page}&limit=${limit}&search=${search}`)
       return {
         message: 'success',
         status: 200,
@@ -18,9 +18,9 @@ class CareerProvider extends HttpRequest {
     }
   }
 
-  async getCareerById(id) {
+  async getCourseById(id) {
     try {
-      const data = await this.get(`/careers/${id}`)
+      const data = await this.get(`/courses/${id}`)
       return {
         message: 'success',
         status: 200,
@@ -34,9 +34,9 @@ class CareerProvider extends HttpRequest {
     }
   }
 
-  async getCareerBySkillId(id, page = 1, limit = 99999) {
+  async getCourseByCareerId(id, page = 1, limit = 99999) {
     try {
-      const data = await this.get(`/careers-by-skill/${id}?page=${page}&limit=${limit}`)
+      const data = await this.get(`/courses-by-career/${id}?page=${page}&limit=${limit}`)
       return {
         message: 'success',
         status: 200,
@@ -50,9 +50,9 @@ class CareerProvider extends HttpRequest {
     }
   }
 
-  async getCareerByCourseId(id, page = 1, limit = 99999) {
+  async getCourseBySkillId(id, page = 1, limit = 99999) {
     try {
-      const data = await this.get(`/careers-by-course/${id}?page=${page}&limit=${limit}`)
+      const data = await this.get(`/courses-by-skill/${id}?page=${page}&limit=${limit}`)
       return {
         message: 'success',
         status: 200,
@@ -67,4 +67,4 @@ class CareerProvider extends HttpRequest {
   }
 }
 
-export default CareerProvider
+export default CourseProvider

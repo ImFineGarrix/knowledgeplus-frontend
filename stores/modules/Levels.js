@@ -14,7 +14,7 @@ export const useLevelStore = defineStore('level', {
       this.levels = item
     },
     getLevelNameById(id) {
-      return this.levels.find((level) => level.levelId === id ? level : '')?.name || ''
+      return this.levels.find((level) => level.levelId === id)?.level || ''
     }
   },
 })

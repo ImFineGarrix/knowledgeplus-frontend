@@ -6,12 +6,15 @@ export const useSectionStore = defineStore('section', {
   }),
 
   getters: {
-    category: (state) => state.sections,
+    section: (state) => state.sections,
   },
 
   actions: {
     setSection(item) {
-      this.sections = [{ name: 'All', categoryId: 0 }, ...item]
+      this.sections = [{ name: 'All', sectionId: 0 }, ...item]
     },
+    getSectionById(id) {
+      return this.sections.find((section) => section.sectionId === id)
+    }
   },
 })

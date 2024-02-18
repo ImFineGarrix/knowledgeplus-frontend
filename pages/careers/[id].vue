@@ -4,113 +4,89 @@
       <div class="w-7/12 space-y-2">
         <div class="flex space-x-2">
           <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
-            {{ career.categories[0].name }}
+            {{ career?.groups[0]?.name || '' }}
           </p>
           <p
             class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full"
-            v-if="career.categories.length > 1">
-            {{ career.categories[1].name }}
+            v-if="career.groups.length > 1">
+            {{ career?.groups[1]?.name || ''}}
           </p>
         </div>
-        <p class="pt-2 text-6xl font-bold">{{ career.name }}</p>
+        <p class="pt-2 text-6xl font-bold">{{ career?.name || '' }}</p>
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
-        <p class="w-10/12 text-sm text-gray-600">
-          {{ career.description }}
+        <p class="w-10/12 text-sm text-gray-600 two-lines-ellipsis">
+          <span>{{ career?.description || '' }}</span>
         </p>
       </div>
       <div class="w-5/12">
-        <img :src="imageUrl" class="object-contain w-full h-96" />
+        <img
+          :src="getImageUrl(this.career?.groups[0]?.groupId || 0)"
+          class="object-contain w-full h-96" />
       </div>
     </div>
-    <div class="pt-10">
-      <div class="flex space-x-3">
-        <p
-          class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">
-          ทักษะที่เกี่ยวข้อง
-        </p>
-        <!-- <p
-          class="cursor-pointer px-8 flex items-center font-semibold bg-white border-2 rounded-full border-[#D3D3D3] transition-all duration-300 hover:bg-[#d7d7d7b2]">
-          คอร์สที่เกี่ยวข้อง
-        </p> -->
-      </div>
-      <div class="mb-4">
-        <div
-          class="grid grid-cols-4 gap-4 my-6 mt-[28px]"
-          v-if="career.skills.length">
-          <div
-            v-for="(skill, indexSkill) in career.skills"
-            :key="`skill-${indexSkill}`">
-            <NuxtLink :to="`/skills/${skill.skillId}`">
-              <CardSkill
-                :level="skill.levelId"
-                :name="skill.name"
-                :desc="skill.description"
-                :image="`${config.public.firebaseBaseUrl}${skill.imageUrl}`" />
-            </NuxtLink>
-          </div>
+    <div class="px-6 py-6 my-20 space-y-6 rounded-md shadow-lg">
+      <div class="grid grid-cols-12 gap-10">
+        <div class="col-span-9 space-y-6">
+          <Explain
+            id="description"
+            title="Description"
+            :desc="career?.description || '-'" />
         </div>
-        <div v-else class="py-20 my-6 border-2 border-gray-200 rounded-lg">
-          <p class="text-2xl font-semibold text-center text-gray-500">
-            NO SKILL
-          </p>
+        <div class="col-span-3">
+          <NavbarExplain :navbars="navbarExplain" />
         </div>
-        <!-- <Pagination /> -->
       </div>
+    </div>
+    <div>
+      <Related :remove-id="1" :id-params="idParams" />
     </div>
   </div>
 </template>
 <script>
 import CareerProvider from '~/resources/CareerProvider'
+import SectionProvider from '~/resources/SectionProvider'
+import GroupProvider from '~/resources/GroupProvider'
 import { useRuntimeConfig } from 'nuxt/app'
+import { MainStores } from '~/stores'
 
 export default {
   data() {
     return {
       CareerService: new CareerProvider(),
+      SectionService: new SectionProvider(),
+      GroupService: new GroupProvider(),
+      Stores: MainStores(),
       config: useRuntimeConfig(),
       career: {
         name: '',
         description: '',
         shortDesc: '',
-        categories: [{ imageUrl: '' }],
-        skills: [],
+        groups: [{ name: '' }],
+        skillsLevels: [],
       },
-      recommendSkill: [
+      navbarExplain: [
         {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'Coding',
-          link: '/images/icon/good-code.png',
-        },
-        {
-          name: 'CodingCodingCodingCodingCodingCodingCodingCoding',
-          link: '/images/icon/good-code.png',
-        },
-      ],
+          label: 'Description',
+          val: 'description'
+        }
+      ]
     }
   },
   computed: {
     idParams() {
       return this.$route.params.id || ''
     },
-    imageUrl() {
-      return `${this.config.public.firebaseBaseUrl}${this.career.categories[0].imageUrl}`
-    },
   },
   mounted() {
     this.getCareerById(this.idParams)
+    if (!this.Stores.SectionStore.section.length) {
+      this.getSection()
+    }
+    if (!this.Stores.GroupStore.group.length) {
+      this.getGroup()
+    }
   },
   methods: {
     async getCareerById(id) {
@@ -119,6 +95,28 @@ export default {
         this.career = status.data
       }
     },
+    async getSection() {
+      const status = await this.SectionService.getSection()
+      if (status.message === 'success') {
+        this.Stores.SectionStore.setSection(status.data)
+      }
+    },
+    async getGroup () {
+      const status = await this.GroupService.getGroup()
+      if (status.message === 'success') {
+        this.Stores.GroupStore.setGroup(status.data)
+      }
+    },
+    getImageUrl (id) {
+      const group = this.Stores.GroupStore.getGroupById(id)
+      const section = this.Stores.SectionStore.getSectionById(group.groupId)
+
+      if (section.imageUrl) {
+        return `${this.config.public.firebaseBaseUrl}${section.imageUrl}`
+      }
+      return ''
+
+    }
   },
 }
 </script>

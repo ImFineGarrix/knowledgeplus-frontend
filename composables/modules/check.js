@@ -3,8 +3,8 @@ class CheckModule {
     return !!items.length
   }
 
-  checkSearch(text, sectionId = 0) {
-    return !text && sectionId === 0
+  checkSearch(search, id = 0) {
+    return search === '' && id === 0
   }
 }
 export default CheckModule

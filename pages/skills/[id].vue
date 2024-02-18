@@ -4,7 +4,7 @@
       <div class="w-7/12 space-y-2">
         <div class="flex">
           <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
-            {{ LevelStore.getLevelNameById(skill.levelId) }}
+            {{ types[skill.type] }}
           </p>
         </div>
         <p class="pt-1 text-6xl font-bold">
@@ -13,8 +13,8 @@
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
-        <p class="w-10/12 pt-1 text-sm text-gray-600">
-          {{ skill.description }}
+        <p class="w-10/12 pt-1 text-sm text-gray-600 two-lines-ellipsis">
+          <span>{{ skill.description || '-' }}</span>
         </p>
       </div>
       <div class="w-5/12">
@@ -29,59 +29,32 @@
           <Explain
             id="description"
             title="Description"
-            :desc="skill.description" />
+            :desc="skill.description || '-'" />
           <Explain
             id="knowledge"
             title="Knowledge"
-            desc="Lorem Ipsum description of the skill description" />
+            have-level
+            :desc-levels="skill.knowledge || '-'" />
           <Explain
             id="ability"
             title="Ability"
-            desc="Lorem Ipsum description of the skill description Lorem Ipsum description of the skill descriptionLorem Ipsum description of the skill descriptionLorem Ipsum description of the skill description" />
+            have-level
+            :desc-levels="skill.ability || '-'" />
         </div>
         <div class="col-span-3">
           <NavbarExplain :navbars="navbarExplain" />
         </div>
       </div>
     </div>
-    <div class="py-4">
-      <div class="flex space-x-3">
-        <p
-          class="cursor-pointer bg-[#319F43] flex items-center py-2 px-8 rounded-full font-semibold text-white">
-          อาชีพที่เกี่ยวข้อง
-        </p>
-        <p
-          class="cursor-pointer px-8 flex items-center font-semibold bg-white border-2 rounded-full border-[#D3D3D3] transition-all duration-300 hover:bg-[#d7d7d7b2]">
-          คอร์สที่เกี่ยวข้อง
-        </p>
-      </div>
-      <div class="mb-4">
-        <div class="grid grid-cols-4 gap-4 mt-[28px]" v-if="careers.length">
-          <div
-            v-for="(career, indexCareer) in careers"
-            :key="`career-${indexCareer}`">
-            <NuxtLink :to="`/careers/${career.careerId}`">
-              <CardCareer
-                :category="career.categories[0].name"
-                :name="career.name"
-                :desc="career.description" />
-            </NuxtLink>
-          </div>
-        </div>
-        <div v-else class="py-20 my-6 border-2 border-gray-200 rounded-lg">
-          <p class="text-2xl font-semibold text-center text-gray-500">
-            NO CAREER
-          </p>
-        </div>
-      </div>
+    <div>
+      <Related :remove-id="2" :id-params="idParams" />
     </div>
   </div>
 </template>
 <script>
 import LevelProvider from '~/resources/LevelProvider'
 import SkillProvider from '~/resources/SkillProvider'
-import CareerProvider from '~/resources/CareerProvider'
-import { useLevelStore } from '~/stores/Levels'
+import { MainStores } from '~/stores'
 import { useRuntimeConfig } from 'nuxt/app'
 
 export default {
@@ -89,14 +62,15 @@ export default {
     return {
       LevelService: new LevelProvider(),
       SkillService: new SkillProvider(),
-      CareerService: new CareerProvider(),
-      LevelStore: useLevelStore(),
+      Stores: MainStores(),
       config: useRuntimeConfig(),
       skill: {
         name: '',
         description: '',
         imageUrl: '',
-        levelId: '',
+        skillsLevels: [],
+        knowledge: [],
+        ability: []
       },
       careers: [],
       navbarExplain: [
@@ -112,7 +86,13 @@ export default {
           label: 'Ability',
           val: 'ability'
         }
-      ]
+      ],
+      types: {
+        HARD: 'Hard Skill',
+        SOFT: 'Soft Skill'
+      },
+      relatedId: 0,
+      relateds: []
     }
   },
   computed: {
@@ -121,29 +101,37 @@ export default {
     },
   },
   mounted() {
-    if (!this.LevelStore.level.length) {
+    if (!this.Stores.LevelStore.level.length) {
       this.getLevel()
     }
     this.getSkillById(this.idParams)
-    this.getCareer()
   },
   methods: {
     async getSkillById(id) {
       const status = await this.SkillService.getSkillById(id)
       if (status.message === 'success') {
-        this.skill = status.data
+
+        const knowledge = status.data.skillsLevels.map((sl) => ({
+          desc: sl?.knowledgeDesc || '',
+          levelId: sl?.levelId || 0
+        }))
+
+        const ability = status.data.skillsLevels.map((sl) => ({
+          desc: sl?.abilityDesc || '',
+          levelId: sl?.levelId || 0
+        }))
+
+        this.skill = {
+          ...status.data,
+          knowledge,
+          ability
+        }
       }
     },
     async getLevel() {
       const status = await this.LevelService.getLevel()
       if (status.message === 'success') {
-        this.LevelStore.setLevel(status.data)
-      }
-    },
-    async getCareer() {
-      const status = await this.CareerService.getCareer(1, 4)
-      if (status.message === 'success') {
-        this.careers = status.data.careers
+        this.Stores.LevelStore.setLevel(status.data)
       }
     },
   },

@@ -13,30 +13,29 @@
     <div>
       <p class="text-2xl font-semibold">ทักษะทั้งหมด</p>
       <div v-if="ready">
-        <div
-          class="grid grid-cols-4 gap-4 my-12"
-          v-if="Composables.check.checkEmpty(skills)">
-          <div
-            v-for="(skill, indexSkill) in searchSkill"
-            :key="`skill-${indexSkill}`">
-            <NuxtLink :to="`/skills/${skill.skillId}`">
-              <CardSkill
-                :name="skill.name"
-                :desc="skill.description"
-                :level="skill.levelId"
-                :image="`${config.public.firebaseBaseUrl}${skill.imageUrl}`" />
-            </NuxtLink>
+        <div v-if="!error.isError">
+          <div class="grid grid-cols-4 gap-4 my-12" v-if="skills.length">
+            <div
+              v-for="(skill, indexSkill) in skills"
+              :key="`skill-${indexSkill}`">
+              <NuxtLink :to="`/skills/${skill.skillId}`">
+                <CardSkill
+                  :name="skill.name"
+                  :desc="skill.description || '-'"
+                  :type="skill.type"
+                  :image="skill.imageUrl" />
+              </NuxtLink>
+            </div>
           </div>
+          <EmptyData v-else :active="Composables.check.checkSearch(search)" />
         </div>
-        <EmptyData v-else :active="Composables.check.checkSearch(search)" />
+        <MessageError v-else />
       </div>
       <Loading v-else />
     </div>
   </div>
 </template>
-
 <script>
-import { useRuntimeConfig } from 'nuxt/app'
 import { MainComposables } from '~/composables/index'
 import SkillProvider from '~/resources/SkillProvider'
 export default {
@@ -46,15 +45,13 @@ export default {
       Composables: MainComposables(),
       search: '',
       skills: [],
-      config: useRuntimeConfig(),
       skills: [],
       ready: false,
+      error: {
+        isError: false,
+        message: '',
+      }
     }
-  },
-  computed: {
-    searchSkill() {
-      return this.Composables.search.searchByText(this.skills, this.search)
-    },
   },
   mounted() {
     this.getSkill()
@@ -64,8 +61,10 @@ export default {
       const status = await this.SkillService.getSkill(1, 9999)
       if (status.message === 'success') {
         this.skills = status.data.skills
-        this.ready = true
+      } else {
+        this.error.isError = true
       }
+      this.ready = true
     },
     handleSearch(newSearch) {
       this.search = newSearch
@@ -73,5 +72,3 @@ export default {
   },
 }
 </script>
-
-<style lang="scss" scoped></style>

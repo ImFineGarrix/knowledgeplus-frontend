@@ -1,10 +1,10 @@
 import HttpRequest from './HttpRequest'
 
-class SectionProvider extends HttpRequest {
+class GroupProvider extends HttpRequest {
 
-  async getSection() {
+  async getGroup() {
     try {
-      const data = await this.get(`/sections`)
+      const data = await this.get(`/groups`)
       return {
         message: 'success',
         status: 200,
@@ -18,9 +18,9 @@ class SectionProvider extends HttpRequest {
     }
   }
 
-  async getSectionById(id) {
+  async getGroupById(id) {
     try {
-      const data = await this.get(`/sections/${id}`)
+      const data = await this.get(`/groups/${id}`)
       return {
         message: 'success',
         status: 200,
@@ -36,4 +36,4 @@ class SectionProvider extends HttpRequest {
 
 }
 
-export default SectionProvider
+export default GroupProvider

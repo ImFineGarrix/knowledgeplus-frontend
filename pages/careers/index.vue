@@ -9,12 +9,12 @@
             placeholder="ค้นหาอาชีพที่คุณสนใจ" />
           <div class="flex justify-center space-x-3">
             <div
-              v-for="(category, indexCategory) in SectionStore.category"
-              :key="`category-${indexCategory}`">
+              v-for="(group, indexGroup) in Stores.GroupStore.group"
+              :key="`group-${indexGroup}`">
               <Button
-                :name="category.name"
-                :active="checkButtonActive(category.categoryId, categoryId)"
-                @click="setInputId(category.categoryId)" />
+                :name="group.name"
+                :active="checkButtonActive(group.groupId, groupId)"
+                @click="setInputId(group.groupId)" />
             </div>
           </div>
         </div>
@@ -23,63 +23,55 @@
     <div>
       <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
       <div v-if="ready">
-        <div
-          class="grid grid-cols-4 gap-6 my-6"
-          v-if="Composables.check.checkEmpty(careers)">
-          <div
-            v-for="(career, indexCareer) in searchCareer"
-            :key="`career-${indexCareer}`">
-            <NuxtLink :to="`/careers/${career.careerId}`">
-              <CardCareer
-                :category="career.categories[0].name"
-                :category2="
-                  career.categories.length > 1 ? career.categories[1].name : ''
-                "
-                :name="career.name"
-                :desc="career.description" />
-            </NuxtLink>
+        <div v-if="!error.isError">
+          <div class="grid grid-cols-4 gap-6 my-6" v-if="careers.length">
+            <div
+              v-for="(career, indexCareer) in careers"
+              :key="`career-${indexCareer}`">
+              <NuxtLink :to="`/careers/${career.careerId}`">
+                <CardCareer
+                  :group="career.groups[0].name"
+                  :name="career.name"
+                  :desc="career.description || '-'" />
+              </NuxtLink>
+            </div>
           </div>
+          <EmptyData
+            :active="Composables.check.checkSearch(search, groupId)"
+            v-else />
         </div>
-        <EmptyData
-          :active="Composables.check.checkSearch(search, categoryId)"
-          v-else />
+        <MessageError v-else />
       </div>
       <Loading v-else />
     </div>
   </div>
 </template>
-
 <script>
-import { useSectionStore } from '~/stores/Sections'
+import { MainStores } from '~/stores'
 import { MainComposables } from '~/composables/index'
-import SectionProvider from '~/resources/SectionProvider'
+import GroupProvider from '~/resources/GroupProvider'
 import CareerProvider from '~/resources/CareerProvider'
 
 export default {
   data() {
     return {
-      SectionService: new SectionProvider(),
+      GroupService: new GroupProvider(),
       CareerService: new CareerProvider(),
-      SectionStore: useSectionStore(),
       Composables: MainComposables(),
+      Stores: MainStores(),
       search: '',
-      categoryId: 0,
+      groupId: 0,
       careers: [],
       ready: false,
+      error: {
+        isError: false,
+        message: ''
+      }
     }
   },
-  computed: {
-    searchCareer() {
-      return this.Composables.search.searchByTextAndSection(
-        this.careers,
-        this.search,
-        this.categoryId
-      )
-    },
-  },
   mounted() {
-    if (!this.SectionStore.category.length) {
-      this.getSection()
+    if (!this.Stores.GroupStore.group.length) {
+      this.getGroup()
     }
     this.getCareer()
   },
@@ -88,20 +80,22 @@ export default {
       const status = await this.CareerService.getCareer(1, 9999)
       if (status.message === 'success') {
         this.careers = status.data.careers
-        this.ready = true
+      } else {
+        this.error.isError = true
       }
+      this.ready = true
     },
-    async getSection() {
-      const status = await this.SectionService.getSection()
+    async getGroup() {
+      const status = await this.GroupService.getGroup()
       if (status.message === 'success') {
-        this.SectionStore.setSection(status.data)
+        this.Stores.GroupStore.setGroup(status.data)
       }
     },
     handleSearch(newSearch) {
       this.search = newSearch.trim()
     },
     setInputId(id) {
-      this.categoryId = id
+      this.sectionId = id
     },
     checkButtonActive(id, input) {
       return id === input
@@ -109,4 +103,3 @@ export default {
   },
 }
 </script>
-~/resources/SectionProvider ~/stores/Sections

@@ -4,13 +4,15 @@
     <div class="flex mx-5 mt-4">
       <p
         class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43] uppercase">
-        {{ LevelStore.getLevelNameById(level) }}
+        {{ types[type] }}
       </p>
     </div>
     <div class="px-8 py-5">
       <div class="space-y-5">
-        <div>
-          <img :src="image" class="w-auto h-10" />
+        <div v-if="image">
+          <img
+            :src="`${config.public.firebaseBaseUrl}${image}`"
+            class="w-auto h-10" />
         </div>
         <div>
           <div class="text-xl font-semibold leading-5 two-lines-ellipsis">
@@ -26,8 +28,8 @@
   </div>
 </template>
 <script>
-import { useLevelStore } from '~/stores/Levels'
-import LevelProvider from '~/resources/LevelProvider'
+import { MainStores } from '~/stores'
+import { useRuntimeConfig } from 'nuxt/app'
 
 export default {
   props: {
@@ -43,27 +45,22 @@ export default {
       type: String,
       default: () => '',
     },
-    level: {
-      type: Number,
-      default: () => 1,
+    type: {
+      type: String,
+      default: () => '',
     },
   },
   data() {
     return {
-      LevelStore: useLevelStore(),
-      LevelService: new LevelProvider(),
-    }
-  },
-  mounted() {
-    if (!this.LevelStore.level.length) {
-      this.getLevel()
+      Stores: MainStores(),
+      config: useRuntimeConfig(),
+      types: {
+        HARD: 'Hard Skill',
+        SOFT: 'Soft Skill'
+      }
     }
   },
   methods: {
-    async getLevel() {
-      const { data } = await this.LevelService.getLevel()
-      this.LevelStore.setLevel(data)
-    },
   },
 }
 </script>
