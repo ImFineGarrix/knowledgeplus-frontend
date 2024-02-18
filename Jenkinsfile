@@ -29,7 +29,7 @@ stages {
         script {
             def envContent = """
                 BASE_PATH=${ENV == 'dev' ? '/sj2/dev' : '/sj2'}
-                API_BASE_URL=https://capstone23.sit.kmutt.ac.th/sj2${ENV == 'dev' ? '/sj2/dev/api' : '/sj2/api'}
+                API_BASE_URL=https://capstone23.sit.kmutt.ac.th/sj2${ENV == 'dev' ? '/dev/api' : '/api'}
                 FIREBASE_BASE_URL=https://firebasestorage.googleapis.com/v0/b/knowledge-project-${ENV == 'dev' ? 'devmode' : '7e224'}.appspot.com/o
             """
             writeFile file: '.env', text: envContent
