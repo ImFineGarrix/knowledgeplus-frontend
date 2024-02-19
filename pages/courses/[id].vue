@@ -6,8 +6,8 @@
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
-        <p class="w-10/12 pt-1 text-sm text-gray-600">
-          {{ course.description }}
+        <p class="w-10/12 pt-1 text-sm text-gray-600 two-lines-ellipsis">
+          <span>{{ course.description }}</span>
         </p>
         <div class="flex py-6">
           <a
