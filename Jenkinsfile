@@ -47,7 +47,7 @@ stages {
             steps {
                 script {
                     sh '''                     
-                        docker run -d --name nuxt-container-${ENV} -p 3000:3000 --network ${ENV} sj2vue-nuxt-${ENV}:latest
+                        docker run -d --name nuxt-container-${ENV} -p :3000 --network ${ENV} sj2vue-nuxt-${ENV}:latest
                     '''
                 }
             }
