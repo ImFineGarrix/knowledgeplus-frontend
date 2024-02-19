@@ -36,14 +36,12 @@ export default {
   methods: {
     setupPagination() {
       this.pagination = []
-      console.log(this.pages)
       for (let i = 0; i < this.pages; i++) {
         this.pagination.push({
           page: i + 1,
           isPage: i + 1 === this.pagePagination,
         })
       }
-      console.log(this.pagination)
     },
     gotoPage(page) {
       this.pagePagination = page

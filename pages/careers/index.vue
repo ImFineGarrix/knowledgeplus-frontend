@@ -86,7 +86,8 @@ export default {
       this.getGroup()
     } else {
       this.getGroupByPagination()
-      this.groupPages = Math.round(this.Stores.GroupStore.group.length / this.groupLimit)
+      this.groupPages = Math.ceil(this.Stores.GroupStore.group.length / this.groupLimit)
+      this.groupReady = true
     }
     this.getCareer(this.search, this.groupId)
   },
@@ -105,7 +106,7 @@ export default {
       if (status.message === 'success') {
         this.Stores.GroupStore.setGroup(status.data)
         this.getGroupByPagination()
-        this.groupPages = Math.ceil(this.Stores.GroupStore.group.length / this.groupLimit)
+        this.groupPages = Math.ceil(status.data.length / this.groupLimit)
         this.groupReady = true
       }
     },
