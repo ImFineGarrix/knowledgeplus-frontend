@@ -37,10 +37,10 @@
             :key="`skill-${indexSkill}`">
             <NuxtLink :to="`/skills/${skill.skillId}`">
               <CardSkill
-                :name="skill.name"
-                :desc="skill.description || '-'"
-                :type="skill.type"
-                :image="skill.imageUrl" />
+                :name="getNameSkillWithLevel(skill.skill.name, skill.levelId)"
+                :desc="skill.skill.description || '-'"
+                :type="skill.skill.type"
+                :image="skill.skill.imageUrl" />
             </NuxtLink>
           </div>
         </div>
@@ -78,6 +78,7 @@ import { MainStores } from '~/stores'
 import SkillProvider from '~/resources/SkillProvider';
 import CareerProvider from '~/resources/CareerProvider';
 import CourseProvider from '~/resources/CourseProvider';
+import LevelProvider from '~/resources/LevelProvider'
 
 export default {
   props: {
@@ -92,6 +93,7 @@ export default {
   },
   data () {
     return {
+      LevelService: new LevelProvider(),
       SkillService: new SkillProvider(),
       CareerService: new CareerProvider(),
       CourseService: new CourseProvider(),
@@ -106,6 +108,9 @@ export default {
   mounted () {
     this.relateds = this.Stores.RelatedStore.getRelatedByRemoveId(this.removeId)
     this.relatedId = this.relateds[0].id
+    if (!this.Stores.LevelStore.level.length) {
+      this.getLevel()
+    }
     if (this.removeId === 1) {
       this.getSkillByCareerId(this.idParams)
       this.getCourseByCareerId(this.idParams)
@@ -135,17 +140,17 @@ export default {
       }
     },
     async getSkillByCareerId (id) {
-      const status = await this.SkillService.getSkillByCareerId(id)
+      const status = await this.CareerService.getCareerById(id)
       if (status.message === 'success') {
         const { data } = status
-        this.skills = data.skills
+        this.skills = data.skillsLevels
       }
     },
     async getSkillByCourseId (id) {
-      const status = await this.SkillService.getSkillByCourseId(id)
+      const status = await this.CourseService.getCourseById(id)
       if (status.message === 'success') {
         const { data } = status
-        this.skills = data.skills
+        this.skills = data.skillsLevels
       }
     },
     async getCourseByCareerId (id) {
@@ -160,6 +165,20 @@ export default {
       if (status.message === 'success') {
         const { data } = status
         this.courses = data.courses
+      }
+    },
+    async getLevel() {
+      const status = await this.LevelService.getLevel()
+      if (status.message === 'success') {
+        this.Stores.LevelStore.setLevel(status.data)
+      }
+    },
+    getNameSkillWithLevel (name, levelId) {
+      let levelName = this.Stores.LevelStore.getLevelNameById(levelId)
+      if (levelId <= 6) {
+        return `${name} (level: ${levelName})`
+      } else {
+        return `${name} (${levelName})`
       }
     },
     setInputId(id) {
