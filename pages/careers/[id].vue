@@ -21,9 +21,9 @@
         </p>
       </div>
       <div class="w-5/12">
-        <!-- <img
-          :src="getImageUrl(this.career?.groups[0]?.groupId || 0)"
-          class="object-contain w-full h-96" /> -->
+        <img
+          :src="`${config.public.firebaseBaseUrl}${imageSection}`"
+          class="object-contain w-full h-96" />
       </div>
     </div>
     <div class="px-6 py-6 my-20 space-y-6 rounded-md shadow-lg">
@@ -71,7 +71,8 @@ export default {
           label: 'Description',
           val: 'description'
         }
-      ]
+      ],
+      imageSection: ''
     }
   },
   computed: {
@@ -81,42 +82,27 @@ export default {
   },
   mounted() {
     this.getCareerById(this.idParams)
-    if (!this.Stores.SectionStore.section.length) {
-      this.getSection()
-    }
-    if (!this.Stores.GroupStore.group.length) {
-      this.getGroup()
-    }
   },
   methods: {
     async getCareerById(id) {
       const status = await this.CareerService.getCareerById(id)
       if (status.message === 'success') {
         this.career = status.data
+        this.getGroupById(status.data.groups[0].groupId)
       }
     },
-    async getSection() {
-      const status = await this.SectionService.getSection()
+    async getGroupById (id) {
+      const status = await this.GroupService.getGroupById(id)
       if (status.message === 'success') {
-        this.Stores.SectionStore.setSection(status.data)
+        this.getSectionById(status.data.sections[0].sectionId)
       }
     },
-    async getGroup () {
-      const status = await this.GroupService.getGroup()
+    async getSectionById (id) {
+      const status = await this.SectionService.getSectionById(id)
       if (status.message === 'success') {
-        this.Stores.GroupStore.setGroup(status.data)
+        this.imageSection = status.data?.imageUrl || ''
       }
-    },
-    // getImageUrl (id) {
-    //   const group = this.Stores.GroupStore.getGroupById(id)
-    //   const section = this.Stores.SectionStore.getSectionById(group.groupId)
-
-    //   if (section.imageUrl) {
-    //     return `${this.config.public.firebaseBaseUrl}${section.imageUrl}`
-    //   }
-    //   return ''
-
-    // }
+    }
   },
 }
 </script>
