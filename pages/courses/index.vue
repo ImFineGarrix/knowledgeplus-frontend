@@ -7,6 +7,7 @@
           <div class="space-y-4">
             <Search
               @update-search="handleSearch"
+              @search="searchItem"
               placeholder="ค้นหาคอร์สเรียนที่คุณสนใจ" />
           </div>
         </div>
@@ -56,11 +57,11 @@ export default {
     }
   },
   mounted () {
-    this.getCourse()
+    this.getCourse(this.search)
   },
   methods: {
-    async getCourse () {
-      const status = await this.CourseService.getCourse(1, 9999)
+    async getCourse (search) {
+      const status = await this.CourseService.getCourse(1, 9999, search)
       if (status.message === 'success') {
         this.courses = status.data.courses
       } else {
@@ -71,6 +72,9 @@ export default {
     handleSearch(newSearch) {
       this.search = newSearch.trim()
     },
+    searchItem () {
+      this.getCourse(this.search)
+    }
   }
 }
 </script>

@@ -10,8 +10,8 @@
     </div>
     <div class="px-8 py-4">
       <div>
-        <p class="text-2xl font-medium leading-7">
-          {{ name }}
+        <p class="text-2xl font-medium leading-7 two-lines-ellipsis">
+          <span>{{ name }}</span>
         </p>
         <div class="w-20 my-4 border rounded-full border-[#319F43]"></div>
         <div class="mt-2 text-xs font-normal text-gray-500 w-52">

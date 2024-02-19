@@ -39,7 +39,7 @@
             id="organization"
             title="Organization"
             have-image
-            :image="course.organization.image"
+            :image="course.organization.imageUrl"
             :desc="course.organization.name || '-'" />
           <Explain
             id="learnHours"

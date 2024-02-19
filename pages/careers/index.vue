@@ -3,13 +3,16 @@
     <div id="header-careers" class="flex justify-center mt-16">
       <div class="space-y-7">
         <p class="text-6xl font-semibold text-center font-poppin">CAREERS</p>
-        <div class="space-y-4">
+        <div class="flex justify-center space-y-4">
           <Search
             @update-search="handleSearch"
+            @search="searchItem"
             placeholder="ค้นหาอาชีพที่คุณสนใจ" />
-          <div class="flex justify-center space-x-3">
+        </div>
+        <div v-if="groupReady">
+          <div class="flex justify-center gap-4">
             <div
-              v-for="(group, indexGroup) in Stores.GroupStore.group"
+              v-for="(group, indexGroup) in groups"
               :key="`group-${indexGroup}`">
               <Button
                 :name="group.name"
@@ -17,6 +20,10 @@
                 @click="setInputId(group.groupId)" />
             </div>
           </div>
+          <Pagination
+            :page="groupPage"
+            :pages="groupPages"
+            @pagination="slidePage" />
         </div>
       </div>
     </div>
@@ -60,24 +67,32 @@ export default {
       Composables: MainComposables(),
       Stores: MainStores(),
       search: '',
-      groupId: 0,
       careers: [],
       ready: false,
       error: {
         isError: false,
         message: ''
-      }
+      },
+      groups: [],
+      groupId: 0,
+      groupPage: 1,
+      groupPages: 0,
+      groupLimit: 4,
+      groupReady: false
     }
   },
   mounted() {
     if (!this.Stores.GroupStore.group.length) {
       this.getGroup()
+    } else {
+      this.getGroupByPagination()
+      this.groupPages = Math.round(this.Stores.GroupStore.group.length / this.groupLimit)
     }
-    this.getCareer()
+    this.getCareer(this.search, this.groupId)
   },
   methods: {
-    async getCareer() {
-      const status = await this.CareerService.getCareer(1, 9999)
+    async getCareer(search, id) {
+      const status = await this.CareerService.getCareer(1, 9999, search, id)
       if (status.message === 'success') {
         this.careers = status.data.careers
       } else {
@@ -89,17 +104,31 @@ export default {
       const status = await this.GroupService.getGroup()
       if (status.message === 'success') {
         this.Stores.GroupStore.setGroup(status.data)
+        this.getGroupByPagination()
+        this.groupPages = Math.ceil(this.Stores.GroupStore.group.length / this.groupLimit)
+        this.groupReady = true
       }
+    },
+    getGroupByPagination () {
+      this.groups = this.Stores.GroupStore.getGroupByPagination(this.groupPage, this.groupLimit)
+    },
+    slidePage (page) {
+      this.groupPage = page
+      this.getGroupByPagination()
     },
     handleSearch(newSearch) {
       this.search = newSearch.trim()
     },
     setInputId(id) {
-      this.sectionId = id
+      this.groupId = id
+      this.searchItem()
     },
     checkButtonActive(id, input) {
       return id === input
     },
+    searchItem () {
+      this.getCareer(this.search, this.groupId)
+    }
   },
 }
 </script>

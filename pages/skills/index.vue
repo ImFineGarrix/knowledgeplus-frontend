@@ -5,6 +5,7 @@
         <p class="text-6xl font-semibold text-center font-poppin">SKILLS</p>
         <div class="space-y-4">
           <Search
+            @search="searchItem"
             @update-search="handleSearch"
             placeholder="ค้นหาทักษะคุณสนใจ" />
         </div>
@@ -54,11 +55,11 @@ export default {
     }
   },
   mounted() {
-    this.getSkill()
+    this.getSkill(this.search)
   },
   methods: {
-    async getSkill() {
-      const status = await this.SkillService.getSkill(1, 9999)
+    async getSkill(search) {
+      const status = await this.SkillService.getSkill(1, 9999, search)
       if (status.message === 'success') {
         this.skills = status.data.skills
       } else {
@@ -69,6 +70,9 @@ export default {
     handleSearch(newSearch) {
       this.search = newSearch
     },
+    searchItem () {
+      this.getSkill(this.search)
+    }
   },
 }
 </script>

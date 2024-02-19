@@ -21,9 +21,9 @@
         </p>
       </div>
       <div class="w-5/12">
-        <img
+        <!-- <img
           :src="getImageUrl(this.career?.groups[0]?.groupId || 0)"
-          class="object-contain w-full h-96" />
+          class="object-contain w-full h-96" /> -->
       </div>
     </div>
     <div class="px-6 py-6 my-20 space-y-6 rounded-md shadow-lg">
@@ -107,16 +107,16 @@ export default {
         this.Stores.GroupStore.setGroup(status.data)
       }
     },
-    getImageUrl (id) {
-      const group = this.Stores.GroupStore.getGroupById(id)
-      const section = this.Stores.SectionStore.getSectionById(group.groupId)
+    // getImageUrl (id) {
+    //   const group = this.Stores.GroupStore.getGroupById(id)
+    //   const section = this.Stores.SectionStore.getSectionById(group.groupId)
 
-      if (section.imageUrl) {
-        return `${this.config.public.firebaseBaseUrl}${section.imageUrl}`
-      }
-      return ''
+    //   if (section.imageUrl) {
+    //     return `${this.config.public.firebaseBaseUrl}${section.imageUrl}`
+    //   }
+    //   return ''
 
-    }
+    // }
   },
 }
 </script>

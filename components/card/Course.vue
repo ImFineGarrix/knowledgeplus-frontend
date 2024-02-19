@@ -5,8 +5,8 @@
       <img :src="`${config.public.firebaseBaseUrl}${image}`" class="w-20" />
     </div>
     <div class="pt-1 space-y-1 px-7">
-      <div class="text-xl font-medium">
-        <span class="two-lines-ellipsis">{{ name }}</span>
+      <div class="text-xl font-medium two-lines-ellipsis">
+        <span>{{ name }}</span>
       </div>
       <div class="leading-none two-lines-ellipsis">
         <span class="text-xs text-gray-500 ">{{ desc }}</span>

@@ -14,7 +14,7 @@ export default defineNuxtConfig({
     head: {
       titleTemplate: 'KNOWLEDGE+',
     },
-    baseURL: process.env.BASE_PATH,
+    baseURL: process.env.BASE_PATH || '',
   },
   runtimeConfig: {
     public: {
@@ -22,5 +22,8 @@ export default defineNuxtConfig({
       firebaseBaseUrl: process.env.FIREBASE_BASE_URL,
     },
   },
-  modules: ['@pinia/nuxt'],
+  modules: ['@pinia/nuxt', 'nuxt-swiper'],
+  swiper: {
+    modules: ['autoplay', 'pagination', 'mousewheel', 'keyboard'],
+  },
 })

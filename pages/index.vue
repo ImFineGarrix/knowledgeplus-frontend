@@ -99,7 +99,7 @@ export default {
       this.getLevel()
     }
     if (!this.Stores.GroupStore.group.length) {
-
+      this.getGroup()
     }
     this.getCareer()
     this.getCourse()

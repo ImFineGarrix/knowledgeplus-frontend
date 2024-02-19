@@ -28,6 +28,7 @@
     "humps": "^2.0.1",
     "js-cookie": "^3.0.5",
     "jwt-decode": "^4.0.0",
+    "nuxt-swiper": "^1.2.2",
     "pinia": "^2.1.7"
   }
 }
