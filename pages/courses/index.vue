@@ -41,6 +41,7 @@
 <script>
 import CourseProvider from '~/resources/CourseProvider'
 import { MainStores } from '~/stores'
+import { MainComposables } from '~/composables'
 
 export default {
   data () {
@@ -53,7 +54,8 @@ export default {
         isError: false,
         message: ''
       },
-      ready: false
+      ready: false,
+      Composables: MainComposables()
     }
   },
   mounted () {
