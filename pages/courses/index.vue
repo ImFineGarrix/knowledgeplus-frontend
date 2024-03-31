@@ -8,25 +8,37 @@
             <Search
               @update-search="handleSearch"
               @search="searchItem"
-              placeholder="ค้นหาคอร์สเรียนที่คุณสนใจ" />
+              placeholder="Search courses" />
           </div>
         </div>
       </div>
       <div>
-        <p class="text-2xl font-semibold">คอร์สเรียนทั้งหมด</p>
+        <p class="text-2xl font-semibold">All Courses</p>
         <div v-if="ready">
           <div v-if="!error.isError">
-            <div v-if="courses.length" class="grid grid-cols-4 gap-6 my-6">
+            <div v-if="courses.length">
+              <div class="grid grid-cols-4 gap-6 my-6">
+                <div
+                  v-for="(course, indexCourse) in courses"
+                  :key="`course-${indexCourse}`">
+                  <NuxtLink :to="`/courses/${course.courseId}`">
+                    <CardCourse
+                      :name="course.name"
+                      :desc="course.description"
+                      :type="course.courseType"
+                      :image="course?.organization?.imageUrl || ''"
+                      :organization-name="course?.organization?.name || ''" />
+                  </NuxtLink>
+                </div>
+              </div>
               <div
-                v-for="(course, indexCourse) in courses"
-                :key="`course-${indexCourse}`">
-                <NuxtLink :to="`/courses/${course.courseId}`">
-                  <CardCourse
-                    :name="course.name"
-                    :desc="course.description"
-                    :image="course?.organization?.imageUrl || ''"
-                    :organization-name="course?.organization?.name || ''" />
-                </NuxtLink>
+                class="flex justify-center mt-20 mb-5"
+                v-if="pagination.page < pagination.pages">
+                <button
+                  @click="getSkillWithBtnMore()"
+                  class="flex px-4 py-2 text-white rounded-lg bg-emerald-600">
+                  MORE
+                </button>
               </div>
             </div>
             <EmptyData :active="Composables.check.checkSearch(search)" v-else />
@@ -49,7 +61,14 @@ export default {
       CourseService: new CourseProvider(),
       Stores: MainStores(),
       courses: [],
+      pagination: {
+        page: 1,
+        pages: 1,
+        total: 0,
+        limit: 20
+      },
       search: '',
+      defaultSearch: '',
       error: {
         isError: false,
         message: ''
@@ -59,23 +78,43 @@ export default {
     }
   },
   mounted () {
-    this.getCourse(this.search)
+    this.defaultSearch = JSON.parse(JSON.stringify(this.search))
+    this.getCourse(this.search, this.defaultSearch)
   },
   methods: {
-    async getCourse (search) {
-      const status = await this.CourseService.getCourse(1, 9999, search)
+    async getCourse (search, defaultSearch) {
+      const status = await this.CourseService.getCourse(this.pagination.page, this.pagination.limit, search)
       if (status.message === 'success') {
-        this.courses = status.data.courses
+        const { data } = status
+        if (search !== defaultSearch) {
+          this.courses = data.courses
+          this.defaultSearch = JSON.parse(JSON.stringify(this.search))
+        } else {
+          this.courses.push(...data.courses)
+        }
+
+        const pagination = data.pagination
+        this.pagination = {
+          ...pagination,
+          pages: this.getPages(pagination.total, pagination.limit)
+        }
       } else {
         this.error.isError = true
       }
       this.ready = true
     },
+    getPages(total, limit) {
+      return Math.ceil(total / limit)
+    },
+    getSkillWithBtnMore () {
+      this.pagination.page++
+      this.getCourse(this.search, this.defaultSearch)
+    },
     handleSearch(newSearch) {
       this.search = newSearch.trim()
     },
     searchItem () {
-      this.getCourse(this.search)
+      this.getCourse(this.search, this.defaultSearch)
     }
   }
 }

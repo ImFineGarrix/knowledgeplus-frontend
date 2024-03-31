@@ -21,6 +21,10 @@ export default {
     pages: {
       type: Number,
       default: () => 1
+    },
+    type: {
+      type: String,
+      default: () => ''
     }
   },
   data() {
@@ -46,7 +50,11 @@ export default {
     gotoPage(page) {
       this.pagePagination = page
       this.setupPagination()
-      this.$emit('pagination', page)
+      if (this.type) {
+        this.$emit('pagination', { page, type: this.type })
+      } else {
+        this.$emit('pagination', page)
+      }
     },
   },
 }

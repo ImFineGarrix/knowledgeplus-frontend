@@ -1,11 +1,15 @@
 <template>
   <div
-    class="h-56 transition-all bg-white border shadow-lg cursor-pointer rounded-2xl hover:scale-105">
+    :class="selected ? 'border-4 border-[#319F92]' : 'border'"
+    class="h-56 transition-all bg-white shadow-lg cursor-pointer rounded-2xl hover:scale-105">
     <div class="flex space-x-2 pt-7 px-7">
       <p
         v-if="group"
-        class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43]">
-        {{ group }}
+        class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43] one-lines-ellipsis w-40">
+        <!-- {{ group }} -->
+        <span>
+          dasdasdsfjasdljfldksajflksajdfklsdjaklfjklsdajfkasjdfkjdsaklfjlasddjflsdjflksdajlkfasjdlfjasd
+        </span>
       </p>
     </div>
     <div class="px-8 py-4">
@@ -38,6 +42,10 @@ export default {
       type: String,
       default: () => '',
     },
+    selected: {
+      type: Boolean,
+      default: () => false,
+    }
   },
 }
 </script>
