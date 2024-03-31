@@ -5,22 +5,10 @@ stages {
      stage('Remove') {
             steps {
                 script {
-                    def containerExistsExitCode = sh(script: "docker ps -a --filter name=nuxt-container-${ENV} --format '{{.Names}}' || true", returnStatus: true)
-
-                    if (containerExistsExitCode == 0) {
-                        echo "Container nuxt-container-${ENV} not found. Skipping removal..."
-                    } else {
-                        echo "Container nuxt-container-${ENV} found. Removing..."
-                        sh "docker rm -f nuxt-container-${ENV}"
-                    }
-
-                    // Optionally, prune unused images
-                    sh "docker image prune -af"
-
-                    // Use either of the following to print the value of ENV
-                    echo "${ENV}"
-                    // or
-                    // echo ${ENV}
+                    sh '''
+                        docker rm -f nuxt-container-${ENV} || true
+                        docker image prune -af
+                    '''
                 }
             }
         }
