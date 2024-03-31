@@ -1,8 +1,16 @@
 <template>
   <div
     class="transition-all bg-white border shadow-lg cursor-pointer h-72 rounded-2xl hover:scale-105">
-    <div class="px-4 pt-5">
-      <img :src="`${config.public.firebaseBaseUrl}${image}`" class="w-20" />
+    <div class="flex mx-5 mt-5">
+      <p
+        class="px-3 py-1 text-xs font-medium text-white rounded-full bg-[#319F43] uppercase">
+        {{ types[type] }}
+      </p>
+    </div>
+    <div class="px-5 py-3">
+      <img
+        :src="`${config.public.firebaseBaseUrl}${image}`"
+        class="w-12 h-12" />
     </div>
     <div class="pt-1 space-y-1 px-7">
       <div class="text-xl font-medium two-lines-ellipsis">
@@ -34,6 +42,10 @@ export default {
       type: String,
       default: () => ''
     },
+    type: {
+      type: String,
+      default: () => ''
+    },
     image: {
       type: String,
       default: () => ''
@@ -45,7 +57,11 @@ export default {
   },
   data () {
     return {
-      config: useRuntimeConfig()
+      config: useRuntimeConfig(),
+      types: {
+        HARD: 'Hard Skill',
+        SOFT: 'Soft Skill'
+      }
     }
   }
 }

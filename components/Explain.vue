@@ -1,7 +1,7 @@
 <template>
   <div>
     <p class="text-4xl font-semibold">
-      <span class="mx-2 text-emerald-600">|</span>{{ title }}
+      <span class="mx-2 text-[#319F43]">|</span>{{ title }}
     </p>
     <div>
       <div v-if="haveLevel" class="my-4 ml-4 mr-10">

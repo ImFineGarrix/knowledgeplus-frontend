@@ -37,9 +37,10 @@
             :key="`skill-${indexSkill}`">
             <NuxtLink :to="`/skills/${skill.skillId}`">
               <CardSkill
-                :name="getNameSkillWithLevel(skill.skill.name, skill.levelId)"
+                :name="skill.skill.name"
                 :desc="skill.skill.description || '-'"
                 :type="skill.skill.type"
+                :level-id="skill.levelId"
                 :image="skill.skill.imageUrl" />
             </NuxtLink>
           </div>
@@ -59,6 +60,7 @@
               <CardCourse
                 :name="course.name"
                 :desc="course.description || '-'"
+                :type="course.courseType"
                 :image="course?.organization?.imageUrl || ''"
                 :organization-name="course?.organization?.name || '-'" />
             </NuxtLink>
@@ -102,7 +104,7 @@ export default {
       careers: [],
       skills: [],
       courses: [],
-      relatedId: 0
+      relatedId: 0,
     }
   },
   mounted () {
@@ -126,7 +128,7 @@ export default {
   },
   methods: {
     async getCareerBySkillId (id) {
-      const status = await this.CareerService.getCareerBySkillId(id)
+      const status = await this.CareerService.getCareerBySkillId(id, this.page)
       if (status.message === 'success') {
         const { data } = status
         this.careers = data.careers
@@ -173,20 +175,12 @@ export default {
         this.Stores.LevelStore.setLevel(status.data)
       }
     },
-    getNameSkillWithLevel (name, levelId) {
-      let levelName = this.Stores.LevelStore.getLevelNameById(levelId)
-      if (levelId <= 6) {
-        return `${name} (level: ${levelName})`
-      } else {
-        return `${name} (${levelName})`
-      }
-    },
     setInputId(id) {
       this.relatedId = id
     },
     checkButtonActive (id, input) {
       return id === input
-    }
+    },
   }
 }
 </script>

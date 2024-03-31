@@ -29,6 +29,10 @@ export default {
           name: 'COURSES',
           link: '/courses',
         },
+        {
+          name: 'RECOMMENDED',
+          link: '/recommend',
+        }
       ],
     }
   },

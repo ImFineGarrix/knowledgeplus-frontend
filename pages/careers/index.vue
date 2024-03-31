@@ -7,7 +7,7 @@
           <Search
             @update-search="handleSearch"
             @search="searchItem"
-            placeholder="ค้นหาอาชีพที่คุณสนใจ" />
+            placeholder="Search careers" />
         </div>
         <div v-if="groupReady">
           <div class="flex justify-center gap-4">
@@ -21,6 +21,7 @@
             </div>
           </div>
           <Pagination
+            v-if="groupPages > 1"
             :page="groupPage"
             :pages="groupPages"
             @pagination="slidePage" />
@@ -28,19 +29,30 @@
       </div>
     </div>
     <div>
-      <p class="text-2xl font-semibold">อาชีพทั้งหมด</p>
+      <p class="text-2xl font-semibold">All Careers</p>
       <div v-if="ready">
         <div v-if="!error.isError">
-          <div class="grid grid-cols-4 gap-6 my-6" v-if="careers.length">
+          <div v-if="careers.length">
+            <div class="grid grid-cols-4 gap-6 my-6">
+              <div
+                v-for="(career, indexCareer) in careers"
+                :key="`career-${indexCareer}`">
+                <NuxtLink :to="`/careers/${career.careerId}`">
+                  <CardCareer
+                    :group="career?.groups[0]?.name || '-'"
+                    :name="career?.name || '-'"
+                    :desc="career.description || '-'" />
+                </NuxtLink>
+              </div>
+            </div>
             <div
-              v-for="(career, indexCareer) in careers"
-              :key="`career-${indexCareer}`">
-              <NuxtLink :to="`/careers/${career.careerId}`">
-                <CardCareer
-                  :group="career.groups[0].name"
-                  :name="career.name"
-                  :desc="career.description || '-'" />
-              </NuxtLink>
+              class="flex justify-center mt-20 mb-5"
+              v-if="pagination.page < pagination.pages">
+              <button
+                @click="getSkillWithBtnMore()"
+                class="flex px-4 py-2 text-white rounded-lg bg-[#319F43]">
+                MORE
+              </button>
             </div>
           </div>
           <EmptyData
@@ -67,7 +79,15 @@ export default {
       Composables: MainComposables(),
       Stores: MainStores(),
       search: '',
+      defaultSearch: '',
+      defaultGroupId: 0,
       careers: [],
+      pagination: {
+        page: 1,
+        pages: 1,
+        total: 0,
+        limit: 20
+      },
       ready: false,
       error: {
         isError: false,
@@ -89,13 +109,28 @@ export default {
       this.groupPages = Math.ceil(this.Stores.GroupStore.group.length / this.groupLimit)
       this.groupReady = true
     }
-    this.getCareer(this.search, this.groupId)
+    this.defaultSearch = JSON.parse(JSON.stringify(this.search))
+    this.defaultGroupId = JSON.parse(JSON.stringify(this.groupId))
+    this.getCareer(this.search, this.defaultSearch, this.groupId)
   },
   methods: {
-    async getCareer(search, id) {
-      const status = await this.CareerService.getCareer(1, 9999, search, id)
+    async getCareer(search, defaultSearch, id) {
+      const status = await this.CareerService.getCareer(this.pagination.page, this.pagination.limit, search, id)
       if (status.message === 'success') {
-        this.careers = status.data.careers
+        const { data } = status
+        if (search !== defaultSearch || id !== this.defaultGroupId) {
+          this.careers = data.careers
+          this.defaultSearch = JSON.parse(JSON.stringify(this.search))
+          this.defaultSearch = JSON.parse(JSON.stringify(this.groupId))
+        } else {
+          this.careers.push(...data.careers)
+        }
+
+        const pagination = data.pagination
+        this.pagination = {
+          ...pagination,
+          pages: this.getPages(pagination.total, pagination.limit)
+        }
       } else {
         this.error.isError = true
       }
@@ -109,6 +144,9 @@ export default {
         this.groupPages = Math.ceil(status.data.length / this.groupLimit)
         this.groupReady = true
       }
+    },
+    getPages(total, limit) {
+      return Math.ceil(total / limit)
     },
     getGroupByPagination () {
       this.groups = this.Stores.GroupStore.getGroupByPagination(this.groupPage, this.groupLimit)
@@ -124,11 +162,15 @@ export default {
       this.groupId = id
       this.searchItem()
     },
+    getSkillWithBtnMore () {
+      this.pagination.page++
+      this.getCareer(this.search, this.defaultSearch, this.groupId)
+    },
     checkButtonActive(id, input) {
       return id === input
     },
     searchItem () {
-      this.getCareer(this.search, this.groupId)
+      this.getCareer(this.search, this.defaultSearch, this.groupId)
     }
   },
 }

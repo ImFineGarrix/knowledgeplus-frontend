@@ -7,13 +7,13 @@
             {{ types[skill.type] }}
           </p>
         </div>
-        <p class="pt-1 text-6xl font-bold">
+        <p class="w-10/12 pt-1 text-6xl font-bold">
           {{ skill.name }}
         </p>
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
         </div>
-        <p class="w-10/12 pt-1 text-sm text-gray-600 two-lines-ellipsis">
+        <p class="pt-1 overflow-auto text-sm text-gray-600 two-lines-ellipsis">
           <span>{{ skill.description || '-' }}</span>
         </p>
       </div>

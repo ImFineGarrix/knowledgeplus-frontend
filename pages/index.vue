@@ -62,6 +62,7 @@
             <CardCourse
               :name="course.name"
               :desc="course.description"
+              :type="course.courseType"
               :image="course?.organization?.imageUrl || ''"
               :organization-name="course?.organization?.name || ''" />
           </NuxtLink>
