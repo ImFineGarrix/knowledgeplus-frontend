@@ -12,8 +12,8 @@
           <div class="font-poppin">
             <span class="font-poppin text-[#5D95F5]">KNOW</span>LEDGE.
           </div>
-          <div class="text-2xl font-light">
-            เรียนรู้ และค้นพบตัวตนในที่เดียว
+          <div class="text-base font-light font-poppin">
+            Learn and discover yourself in the same place
           </div>
         </div>
       </div>
@@ -27,8 +27,8 @@
     </div>
     <div class="space-y-10" v-if="careers.length">
       <TextSection
-        text="ค้นหาอาชีพที่เหมาะกับตัวคุณ"
-        text-button="ดูอาชีพทั้งหมด"
+        text="Search for interesting careers"
+        text-button="View all careers"
         link="/careers" />
       <div class="grid grid-cols-2">
         <div class="flex items-center justify-start">
@@ -51,8 +51,8 @@
     </div>
     <div class="space-y-10" v-if="courses.length">
       <TextSection
-        text="คอร์สที่เปิดสอน"
-        text-button="ดูคอร์สทั้งหมด"
+        text="Available courses"
+        text-button="View all courses"
         link="/courses" />
       <div class="grid grid-cols-4 gap-6 my-6">
         <div

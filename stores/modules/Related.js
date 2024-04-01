@@ -5,15 +5,15 @@ export const useRelatedStore = defineStore('related', {
     relateds: [
       {
         id: 1,
-        name: 'อาชีพเกี่ยวข้อง'
+        name: 'Relevant Careers'
       },
       {
         id: 2,
-        name: 'ทักษะที่เกี่ยวข้อง'
+        name: 'Relevant Skills'
       },
       {
         id: 3,
-        name: 'คอร์สที่เกี่ยวข้อง'
+        name: 'Relevant Courses'
       }
     ]
   }),
