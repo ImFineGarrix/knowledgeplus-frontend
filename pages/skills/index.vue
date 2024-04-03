@@ -77,6 +77,9 @@ export default {
   },
   methods: {
     async getSkill(search, defaultSearch) {
+      if (search !== defaultSearch) {
+        this.pagination.page = 1
+      }
       const status = await this.SkillService.getSkill(this.pagination.page, this.pagination.limit, search)
       if (status.message === 'success') {
         const  { data } = status

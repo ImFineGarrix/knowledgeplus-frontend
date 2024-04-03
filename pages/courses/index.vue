@@ -83,6 +83,9 @@ export default {
   },
   methods: {
     async getCourse (search, defaultSearch) {
+      if (search !== defaultSearch) {
+        this.pagination.page = 1
+      }
       const status = await this.CourseService.getCourse(this.pagination.page, this.pagination.limit, search)
       if (status.message === 'success') {
         const { data } = status

@@ -353,6 +353,9 @@ export default {
       }
     },
     async getCareer (search, id) {
+      if (search !== this.defaultSearch.careers) {
+        this.pagination.careers.page = 1
+      }
       const status = await this.CareerService.getCareer(this.pagination.careers.page, this.pagination.careers.limit, search, id)
       if (status.message === 'success') {
         const { data } = status
@@ -374,6 +377,9 @@ export default {
       this.ready.careers = true
     },
     async getSkill (search) {
+      if (search !== this.defaultSearch.skills) {
+        this.pagination.skills.page = 1
+      }
       const status = await this.SkillService.getSkillLevel(this.pagination.skills.page, this.pagination.skills.limit, search)
       if (status.message === 'success') {
         const { data } = status

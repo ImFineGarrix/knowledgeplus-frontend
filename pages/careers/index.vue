@@ -86,7 +86,7 @@ export default {
         page: 1,
         pages: 1,
         total: 0,
-        limit: 20
+        limit: 4
       },
       ready: false,
       error: {
@@ -115,13 +115,16 @@ export default {
   },
   methods: {
     async getCareer(search, defaultSearch, id) {
+      if (search !== defaultSearch || id !== this.defaultGroupId) {
+        this.pagination.page = 1
+      }
       const status = await this.CareerService.getCareer(this.pagination.page, this.pagination.limit, search, id)
       if (status.message === 'success') {
         const { data } = status
         if (search !== defaultSearch || id !== this.defaultGroupId) {
           this.careers = data.careers
           this.defaultSearch = JSON.parse(JSON.stringify(this.search))
-          this.defaultSearch = JSON.parse(JSON.stringify(this.groupId))
+          this.defaultGroupId = JSON.parse(JSON.stringify(this.groupId))
         } else {
           this.careers.push(...data.careers)
         }
