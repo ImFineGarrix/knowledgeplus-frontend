@@ -28,3 +28,16 @@ html {
 .one-lines-ellipsis span {
   text-overflow: ellipsis;
 }
+
+.popup-active {
+  justify-content: center;
+  position: fixed;
+  z-index: 100;
+  background: rgb(82, 82, 82, 0.4);
+  display: flex;
+  align-items: center;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}

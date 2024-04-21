@@ -1,10 +1,20 @@
 <template>
   <div>
     <div v-if="statusPage !== ''">
-      <HeaderRecommend :status-header="statusPage" :recommends="headers" />
+      <HeaderRecommend
+        :status-header="statusPage"
+        :recommends="headers"
+        :selected-career="selected.career"
+        @set-status-page="setStatusPage" />
       <div v-if="statusPage === 'skill'">
         <div class="my-10 space-y-2">
-          <div class="text-4xl font-semibold">All Skills</div>
+          <div class="flex">
+            <div class="text-4xl font-semibold">All Skills</div>
+            <IconInfo
+              @click="togglePopup(true)"
+              class="mt-1 ml-2 cursor-pointer"
+              width="30px" />
+          </div>
           <div class="flex justify-between">
             <SmallSearch
               placeholder="Search"
@@ -12,11 +22,6 @@
               @update-search="handleSearch"
               @search="searchItem"
               class="-ml-1" />
-            <button
-              @click="setStatusPage('career')"
-              class="bg-[#319F43] py-2 px-5 font-medium rounded-md text-white">
-              Next
-            </button>
           </div>
         </div>
         <div v-if="ready.skills">
@@ -65,19 +70,6 @@
               @update-search="handleSearch"
               @search="searchItem"
               class="-ml-1" />
-            <div class="space-x-4">
-              <button
-                @click="setStatusPage('skill')"
-                class="px-5 py-2 font-medium text-white rounded-md bg-rose-700">
-                Back
-              </button>
-              <button
-                v-if="selected.career"
-                @click="setStatusPage('recommend')"
-                class="bg-[#319F43] py-2 px-5 font-medium rounded-md text-white">
-                Next
-              </button>
-            </div>
           </div>
         </div>
         <div v-if="ready.careers">
@@ -170,7 +162,7 @@
                     :key="`recommend-course-${indexCourse}`">
                     <NuxtLink
                       :to="`/courses/${course.courseId}`"
-                      tagrte="_blank">
+                      target="_blank">
                       <CardCourse
                         :name="course.name"
                         :desc="course?.description || '-'"
@@ -204,6 +196,9 @@
             </button>
           </div>
         </div>
+      </div>
+      <div v-if="statusPopup">
+        <CardLevel @close-popup="togglePopup" />
       </div>
     </div>
     <Loading v-else />
@@ -317,6 +312,7 @@ export default {
         careers: 'knowledge.recommend.careers',
         skills: 'knowledge.recommend.skills'
       },
+      statusPopup: false,
       imageSection: '',
       statusPage: '',
       Composables: MainComposables(),
@@ -474,12 +470,20 @@ export default {
         this.getRecommendByPagination(this.pagination.courses.page, this.pagination.courses.limit, 'courses')
       }
     },
-    setStatusPage (text) {
-      if (text === 'recommend') {
+    setStatusPage (count = 0) {
+      if (count === 0) {
+        this.statusPage = 'skill'
+      }
+      if (count === 1) {
+        this.statusPage = 'career'
+      }
+      if (count === 2) {
+        this.statusPage = 'recommend'
+      }
+      if (this.statusPage === 'recommend') {
         this.getGroupById(this.selected.career.groups[0].groupId)
         this.createRecommendSkill(this.selected.career?.careerId, this.selected.skillId)
       }
-      this.statusPage = text
     },
     setSelectedCareer (data) {
       if (this.selected.career === data) {
@@ -548,6 +552,9 @@ export default {
       this.Composables.cookie.clearCookie(this.cookies.careers)
       this.Composables.cookie.clearCookie(this.cookies.skills)
     },
+    togglePopup (status) {
+      this.statusPopup = status
+    }
   },
 }
 </script>

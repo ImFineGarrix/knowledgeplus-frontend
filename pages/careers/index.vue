@@ -86,7 +86,7 @@ export default {
         page: 1,
         pages: 1,
         total: 0,
-        limit: 4
+        limit: 20
       },
       ready: false,
       error: {

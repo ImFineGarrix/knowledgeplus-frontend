@@ -18,6 +18,10 @@ export default {
     return {
       menus: [
         {
+          name: 'HOME',
+          link: '/'
+        },
+        {
           name: 'CAREERS',
           link: '/careers',
         },
@@ -45,7 +49,7 @@ export default {
   left: 0;
   width: 100%;
   height: 80px;
-  z-index: 999;
+  z-index: 99;
   background-color: #ffffff;
 }
 </style>

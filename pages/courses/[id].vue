@@ -2,6 +2,11 @@
   <div class="my-6 space-y-10">
     <div class="flex items-center gap-10">
       <div class="w-7/12 space-y-2">
+        <div class="flex">
+          <p class="bg-[#319F43] text-white font-medium px-3 py-1 rounded-full">
+            {{ types[course.courseType] }}
+          </p>
+        </div>
         <p class="pt-1 text-6xl font-bold">{{ course.name }}</p>
         <div class="py-2">
           <div class="border-2 border-[#319F43] w-40 rounded-full"></div>
@@ -77,6 +82,10 @@ export default {
           name: '',
           imageUrl: ''
         }
+      },
+      types: {
+        HARD: 'Hard Skill',
+        SOFT: 'Soft Skill'
       },
       navbarExplain: [
         {
