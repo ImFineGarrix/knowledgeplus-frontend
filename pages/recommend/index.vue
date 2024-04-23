@@ -8,14 +8,14 @@
         @set-status-page="setStatusPage" />
       <div v-if="statusPage === 'skill'">
         <div class="my-10 space-y-2">
-          <div class="flex">
-            <div class="text-4xl font-semibold">All Skills</div>
-            <IconInfo
-              @click="togglePopup(true)"
-              class="mt-1 ml-2 cursor-pointer"
-              width="30px" />
-          </div>
           <div class="flex justify-between">
+            <div class="flex">
+              <div class="text-4xl font-semibold">All Skills</div>
+              <IconInfo
+                @click="togglePopup(true)"
+                class="mt-1 ml-2 cursor-pointer"
+                width="30px" />
+            </div>
             <SmallSearch
               placeholder="Search"
               type="skill"
@@ -53,7 +53,7 @@
               </div>
             </div>
             <EmptyData
-              :active="Composables.check.checkSearch(search.skills)"
+              :active="Composables.check.checkSearch(search.skills, defaultSearch.skills)"
               v-else />
           </div>
           <MessageError v-else />
@@ -62,8 +62,8 @@
       </div>
       <div v-if="statusPage === 'career'">
         <div class="my-10 space-y-2">
-          <div class="text-4xl font-semibold">All Careers</div>
           <div class="flex justify-between">
+            <div class="text-4xl font-semibold">All Careers</div>
             <SmallSearch
               placeholder="Search"
               type="career"
@@ -99,7 +99,7 @@
               </div>
             </div>
             <EmptyData
-              :active="Composables.check.checkSearch(search.careers)"
+              :active="Composables.check.checkSearch(search.careers, defaultSearch.careers)"
               v-else />
           </div>
           <MessageError v-else />

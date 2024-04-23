@@ -3,8 +3,16 @@ class CheckModule {
     return !!items.length
   }
 
-  checkSearch(search, id = 0) {
-    return search === '' && id === 0
+  checkSearch(search, defaultSearch = '', id = 0) {
+    if (search === '' && defaultSearch === '' && id === 0) {
+      return true
+    }
+
+    if (search !== '' && defaultSearch === '' && id === 0) {
+      return true
+    }
+
+    return false
   }
 
   checkSome(data, id) {

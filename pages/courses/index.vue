@@ -41,7 +41,9 @@
                 </button>
               </div>
             </div>
-            <EmptyData :active="Composables.check.checkSearch(search)" v-else />
+            <EmptyData
+              :active="Composables.check.checkSearch(search, defaultSearch)"
+              v-else />
           </div>
           <MessageError v-else />
         </div>

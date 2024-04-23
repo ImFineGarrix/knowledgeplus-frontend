@@ -56,7 +56,7 @@
             </div>
           </div>
           <EmptyData
-            :active="Composables.check.checkSearch(search, groupId)"
+            :active="Composables.check.checkSearch(search, defaultSearch, groupId)"
             v-else />
         </div>
         <MessageError v-else />
