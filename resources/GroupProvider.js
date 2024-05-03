@@ -1,10 +1,10 @@
 import HttpRequest from './HttpRequest'
 
-class CategoryProvider extends HttpRequest {
+class GroupProvider extends HttpRequest {
 
-  async getCategory() {
+  async getGroup() {
     try {
-      const data = await this.get(`/categories`)
+      const data = await this.get(`/groups`)
       return {
         message: 'success',
         status: 200,
@@ -18,9 +18,9 @@ class CategoryProvider extends HttpRequest {
     }
   }
 
-  async getCategoryById(id) {
+  async getGroupById(id) {
     try {
-      const data = await this.get(`/categories/${id}`)
+      const data = await this.get(`/groups/${id}`)
       return {
         message: 'success',
         status: 200,
@@ -36,4 +36,4 @@ class CategoryProvider extends HttpRequest {
 
 }
 
-export default CategoryProvider
+export default GroupProvider

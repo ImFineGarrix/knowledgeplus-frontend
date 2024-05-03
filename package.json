@@ -4,11 +4,14 @@
   "type": "module",
   "scripts": {
     "build": "nuxt build",
+    "build:local": "cp .env.local .env && nuxt build",
     "dev": "nuxt dev",
+    "dev:local": "cp .env.local .env && nuxt dev",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "start": "nuxt start"
+    "start": "nuxt start",
+    "start:local": "cp .env.local .env && nuxt start"
   },
   "devDependencies": {
     "@nuxt/devtools": "latest",

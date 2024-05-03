@@ -1,9 +1,9 @@
-import SearchModule from "./modules/search";
 import CheckModule from "./modules/check";
+import CookieModule from "./modules/cookie";
 
 export const MainComposables = () => {
   return {
     check: new CheckModule(),
-    search: new SearchModule()
+    cookie: new CookieModule()
   };
 };

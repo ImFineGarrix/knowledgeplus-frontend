@@ -8,13 +8,6 @@
             <p class="cursor-pointer font-poppin">{{ menu.name }}</p>
           </NuxtLink>
         </div>
-        <!-- <div class="flex items-center space-x-4 font-normal">
-          <p class="cursor-pointer">เข้าสู่ระบบ</p>
-          <p
-            class="cursor-pointer bg-[#319F43] px-4 py-2 text-white rounded-full">
-            ลงทะเบียน
-          </p>
-        </div> -->
       </div>
     </div>
   </div>
@@ -25,13 +18,25 @@ export default {
     return {
       menus: [
         {
-          name: 'JOBS',
-          link: '/jobs',
+          name: 'HOME',
+          link: '/'
+        },
+        {
+          name: 'CAREERS',
+          link: '/careers',
         },
         {
           name: 'SKILLS',
           link: '/skills',
         },
+        {
+          name: 'COURSES',
+          link: '/courses',
+        },
+        {
+          name: 'RECOMMENDED',
+          link: '/recommend',
+        }
       ],
     }
   },
@@ -44,7 +49,7 @@ export default {
   left: 0;
   width: 100%;
   height: 80px;
-  z-index: 999;
+  z-index: 99;
   background-color: #ffffff;
 }
 </style>

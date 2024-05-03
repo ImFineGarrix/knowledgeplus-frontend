@@ -1,9 +1,11 @@
 <template>
   <div>
     <p class="mt-24 text-2xl text-center text-gray-500" v-if="active">
-      เร็ว ๆ นี้
+      COMING SOON
     </p>
-    <p class="mt-24 text-2xl text-center text-gray-500" v-else>ไม่พบรายการ</p>
+    <p class="mt-24 text-2xl text-center text-gray-500" v-else>
+      NO LISTINGS FOUND
+    </p>
   </div>
 </template>
 <script>

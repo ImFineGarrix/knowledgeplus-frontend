@@ -1,10 +1,10 @@
 import HttpRequest from './HttpRequest'
 
-class JobProvider extends HttpRequest {
+class SectionProvider extends HttpRequest {
 
-  async getJob(page, limit) {
+  async getSection() {
     try {
-      const data = await this.get(`/careers_have_categories?page=${page}&limit=${limit}`)
+      const data = await this.get(`/sections`)
       return {
         message: 'success',
         status: 200,
@@ -18,9 +18,9 @@ class JobProvider extends HttpRequest {
     }
   }
 
-  async getJobById(id) {
+  async getSectionById(id) {
     try {
-      const data = await this.get(`/careers/${id}`)
+      const data = await this.get(`/sections/${id}`)
       return {
         message: 'success',
         status: 200,
@@ -33,6 +33,7 @@ class JobProvider extends HttpRequest {
       }
     }
   }
+
 }
 
-export default JobProvider
+export default SectionProvider
